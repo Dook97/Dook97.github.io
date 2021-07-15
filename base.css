@@ -1,0 +1,23 @@
+body {
+    background-color: black;
+    color: grey;
+}
+
+.centered {
+    text-align: center;
+}
+
+.monospace {
+    font-family: monospace;
+}
+
+footer {
+    font-size: xx-small;
+    position : absolute;
+    bottom : 0;
+}
+
+a {
+    text-decoration: none;
+    color: green;
+}
