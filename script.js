@@ -21,7 +21,7 @@ window.addEventListener('load', () => {
 let generatePoint = () => {
     point.x = Math.random() * edge;
     point.y = Math.random() * edge;
-    point.inOut = Math.sqrt((point.x - edge / 2)**2 + (point.y - edge / 2)**2) < edge / 2;
+    point.inOut = (point.x - edge / 2)**2 + (point.y - edge / 2)**2 < (edge / 2)**2;
 };
 
 let countInOut = () => point.inOut ? inOut[0] += 1 : inOut[1] += 1;
