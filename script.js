@@ -21,7 +21,7 @@ window.addEventListener('load', () => {
 });
 
 let generatePoint = () => {
-    let x = Math.random() * canvas.width;
+    let x = Math.random() * canvas.width,
         y = Math.random() * canvas.width;
     point = {
         x : x,
