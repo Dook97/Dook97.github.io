@@ -21,7 +21,7 @@ footer {
     bottom : 0;
 }
 
-a {
+a:link {
     text-decoration: none;
     color: green;
 }
