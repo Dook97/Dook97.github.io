@@ -1,77 +1,103 @@
-let context,
-    edge = 750,
-    scale = 10, // edge MUST be divisible by scale
-    limitXY = edge/scale,
-    grid,
-    interval = 70;
+let context;
+const edge = 750;
+const scale = 10; // edge MUST be divisible by scale
+const limitXY = edge / scale;
+let grid;
+let interval;
+let paused = true;
 
 window.addEventListener('load', () => {
-    let canvas = document.querySelector('canvas'),
-        slider = document.querySelector('input'),
-        table = document.querySelector('table'),
-        inputCell = document.querySelector('#input-cell');
-    slider.addEventListener('input', () => interval = 10*2**(slider.value/100));
+    const canvas = document.querySelector('canvas');
+    const slider = document.querySelector('input');
+    const table = document.querySelector('table');
+    const inputCell = document.querySelector('#input-cell');
 
-    table.setAttribute('style', `width: ${edge+2}px;`)
-    inputCell.setAttribute('style', `width: ${edge-150}px;`)
+    table.setAttribute('style', `width: ${edge + 2}px;`);
+    inputCell.setAttribute('style', `width: ${edge - 150}px;`);
     canvas.setAttribute('width', edge);
     canvas.setAttribute('height', edge);
     context = canvas.getContext('2d');
     context.fillStyle = 'green';
-    
     grid = fillGrid(limitXY, limitXY);
+    interval = 10 * 2 ** slider.value;
+
+    slider.addEventListener('input', () => interval = 10 * 2 ** slider.value);
+
+    canvas.addEventListener('click', e => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / scale);
+        const y = Math.floor((e.clientY - rect.top) / scale);
+        grid[x][y] = !grid[x][y];
+    });
+
     loop();
     draw();
 });
 
-
 const loop = () => {
     setTimeout(() => {
-        grid = updateGrid();
+        if (!paused) {
+            grid = updateGrid();
+        }
         loop();
     }, interval);
-}
+};
 
 const draw = () => {
     context.clearRect(0, 0, edge, edge);
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
             if (grid[x][y]) {
-                context.fillRect(x*scale, y*scale, scale, scale);
+                context.fillRect(x * scale, y * scale, scale, scale);
             }
         }
     }
     requestAnimationFrame(draw);
 };
 
+document.addEventListener('keypress', e => {
+    if (e.key === 's') {
+        paused = !paused;
+    } else if (e.key === 'c') {
+        grid = fillGrid(limitXY, limitXY);
+    }
+});
+
 const updateGrid = () => {
     let out = fillGrid(limitXY, limitXY);
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
             let count = 0;
-            let neighbours = getNeighbours(x, y);
+            const neighbours = getNeighbours(x, y);
             for (const nbr of neighbours) {
                 if (grid[nbr[0]][nbr[1]]) {
                     count++;
                 }
             }
-            out[x][y] = (grid[x][y] && count === 2) || (count === 3);
+            out[x][y] = (grid[x][y] && count === 2) || count === 3;
         }
     }
     return out;
 };
 
 const getNeighbours = (x, y) => {
-    /*
-    code below returns absolute positions of neighbours of the point supplied in argument
-    two cells are neighbours if they share a corner; neighbourship spans across grid boundaries (so a point at x=0 can be neighbour of a point at x=max)
-    the items of the returned list are arranged same way they would be in a grid
-    */
-    return [
-        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y - 1 < 0) ? limitXY - 1 : y - 1], [x, (y - 1 < 0) ? limitXY - 1 : y - 1], [(x + 1 === limitXY) ? 0 : x + 1, (y - 1 < 0) ? limitXY - 1 : y - 1],
-        [(x - 1 < 0) ? limitXY - 1 : x - 1,                             y    ],                                         [(x + 1 === limitXY) ? 0 : x + 1,                             y    ],
-        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y + 1 === limitXY) ?   0 : y + 1], [x, (y + 1 === limitXY) ?   0 : y + 1], [(x + 1 === limitXY) ? 0 : x + 1, (y + 1 === limitXY) ?   0 : y + 1]
+    // prettier-ignore
+    let neighbours = [
+        [x - 1, y - 1], [x, y - 1], [ x + 1, y - 1],
+        [x - 1, y    ],             [ x + 1, y    ],
+        [x - 1, y + 1], [x, y + 1], [ x + 1, y + 1]
     ];
+
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 2; j++) {
+            if (neighbours[i][j] === -1) {
+                neighbours[i][j] = limitXY - 1;
+            } else if (neighbours[i][j] === limitXY) {
+                neighbours[i][j] = 0;
+            }
+        }
+    }
+    return neighbours;
 };
 
 const fillGrid = (x, y) => {
