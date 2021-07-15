@@ -1,12 +1,11 @@
 let canvas,
     context,
-    edge,
     point,
     piContainer,
+    edge = 750,
     piValues = [0, 0];
 
 window.addEventListener('load', () => {
-    edge = 750;
     canvas = document.querySelector('canvas');
     piContainer = document.querySelector('#pi_container')
     canvas.setAttribute('width', edge);
