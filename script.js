@@ -15,13 +15,13 @@ window.addEventListener('load', () => {
     setInterval(() => {
         generatePoint();
         calculatePI();
-        draw();
+        requestAnimationFrame(draw);
     }, 0);
 });
 
 let generatePoint = () => {
-    let x = Math.random() * canvas.width,
-        y = Math.random() * canvas.width;
+    let x = Math.random() * edge,
+        y = Math.random() * edge;
     point = {
         x : x,
         y : y,
