@@ -21,11 +21,7 @@ footer {
     bottom : 0;
 }
 
-a:link {
+a {
     text-decoration: none;
-    color: green;
-}
-
-a:visited {
     color: green;
 }
