@@ -2,21 +2,35 @@ let context,
     edge = 750,
     scale = 10, // edge MUST be divisible by scale
     limitXY = edge/scale,
-    grid;
+    grid,
+    interval = 70;
 
 window.addEventListener('load', () => {
     let canvas = document.querySelector('canvas'),
-        interval = 70;
-    
-    grid = fillGrid(limitXY, limitXY);
+        slider = document.querySelector('input'),
+        table = document.querySelector('table'),
+        inputCell = document.querySelector('#input-cell');
+    slider.addEventListener('input', () => interval = 10*2**(slider.value/100));
+
+    table.setAttribute('style', `width: ${edge+2}px;`)
+    inputCell.setAttribute('style', `width: ${edge-150}px;`)
     canvas.setAttribute('width', edge);
     canvas.setAttribute('height', edge);
     context = canvas.getContext('2d');
     context.fillStyle = 'green';
-
-    setInterval(() => grid = updateGrid(), interval);
+    
+    grid = fillGrid(limitXY, limitXY);
+    loop();
     draw();
 });
+
+
+const loop = () => {
+    setTimeout(() => {
+        grid = updateGrid();
+        loop();
+    }, interval);
+}
 
 const draw = () => {
     context.clearRect(0, 0, edge, edge);
