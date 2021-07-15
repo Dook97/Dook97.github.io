@@ -1,9 +1,9 @@
 let canvas,
     context,
-    point,
     piContainer,
+    point = {},
     edge = 750,
-    piValues = [0, 0];
+    inOut = [0, 0];
 
 window.addEventListener('load', () => {
     canvas = document.querySelector('canvas');
@@ -11,30 +11,24 @@ window.addEventListener('load', () => {
     canvas.setAttribute('width', edge);
     canvas.setAttribute('height', edge);
     context = canvas.getContext('2d');
-
     setInterval(() => {
         generatePoint();
-        calculatePI();
-        requestAnimationFrame(draw);
-    }, 0);
+        countInOut();    
+    },0);
+    draw();
 });
 
 let generatePoint = () => {
-    let x = Math.random() * edge,
-        y = Math.random() * edge;
-    point = {
-        x : x,
-        y : y,
-        inOut: Math.sqrt((x - edge / 2)**2 + (y - edge / 2)**2) < edge / 2
-    };
+    point.x = Math.random() * edge;
+    point.y = Math.random() * edge;
+    point.inOut = Math.sqrt((point.x - edge / 2)**2 + (point.y - edge / 2)**2) < edge / 2;
 };
 
-let calculatePI = () => {
-    point.inOut ? piValues[0] += 1 : piValues[1] += 1;
-    piContainer.textContent = (4 * piValues[0] / (piValues[0] + piValues[1])).toLocaleString('en-US', {minimumFractionDigits: 16, useGrouping:false})
-};
+let countInOut = () => point.inOut ? inOut[0] += 1 : inOut[1] += 1;
 
 let draw = () => {
+    piContainer.textContent = (4 * inOut[0] / (inOut[0] + inOut[1])).toLocaleString('en-US', {minimumFractionDigits: 16, useGrouping:false})
     point.inOut ? context.fillStyle = 'green' : context.fillStyle = 'red';
     context.fillRect(point.x, point.y, 1, 1);
+    requestAnimationFrame(draw);
 };
