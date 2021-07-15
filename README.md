@@ -10,3 +10,5 @@ probability *P* of a point being inside the circle is: *P = πr<sup>2</sup>/4r<s
 
 We can approximate *P* by dividing the amount of points inside the circle by the total number of points.
 And since *π = 4P* we can now also approximate π!
+
+Doesn't really work beyond the first decimal place... oh well.
