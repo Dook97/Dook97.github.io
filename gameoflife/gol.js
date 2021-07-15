@@ -1,7 +1,7 @@
 let context;
-const edge = 750;
+let edge;
 const scale = 10; // edge MUST be divisible by scale
-const limitXY = edge / scale;
+let limitXY;
 let grid;
 let interval;
 let paused = true;
@@ -12,10 +12,8 @@ window.addEventListener('load', () => {
     const table = document.querySelector('table');
     const inputCell = document.querySelector('#input-cell');
 
-    table.setAttribute('style', `width: ${edge + 2}px;`);
-    inputCell.setAttribute('style', `width: ${edge - 150}px;`);
-    canvas.setAttribute('width', edge);
-    canvas.setAttribute('height', edge);
+    edge = canvas.getAttribute('width');
+    limitXY = edge / scale;
     context = canvas.getContext('2d');
     context.fillStyle = 'green';
     grid = fillGrid(limitXY, limitXY);

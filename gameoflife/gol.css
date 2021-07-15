@@ -1,0 +1,70 @@
+.help section {
+    text-align: left;
+    padding: 0px 10px 10px 10px;
+    margin: 0;
+    background-color: rgb(15, 15, 15);
+    border-bottom: 15px solid black;
+}
+
+.help h2 {
+    color: green;
+    font-size: 35px;
+    font-weight: lighter;
+    font-family: monospace;
+    padding: 0px 10px 0px 10px;
+}
+
+.help h3 {
+    margin: 0;
+    padding: 15px;
+    font-size: 25px;
+}
+
+#speed-panel {
+    margin-top: 5px;
+    border: 1px solid grey;
+    width: 752px;
+}
+
+#speed-panel td {
+    white-space: nowrap;
+    text-align: center;
+    padding: 3px;
+    margin: 0;
+}
+
+#input-cell {
+    width: 99%;
+}
+
+#input-cell > input {
+    width: 100%;
+}
+
+#box {
+    display: flex;
+}
+
+#left-panel {
+    padding: 15px 0px 15px 15px;
+    margin-left: auto;
+}
+
+#right-panel {
+    padding: 15px 15px 15px 0px;
+    margin-right: auto;
+}
+
+.sides {
+    flex: 0 1 500px;
+}
+
+#middle {
+    flex: none;
+    height: max-content;
+}
+
+#middle > canvas {
+    border: 1px solid grey;
+    margin-top: 15px;
+}
