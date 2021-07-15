@@ -6,7 +6,7 @@ let context,
 
 window.addEventListener('load', () => {
     let canvas = document.querySelector('canvas'),
-        interval = 30;
+        interval = 70;
     
     grid = fillGrid(limitXY, limitXY);
     canvas.setAttribute('width', edge);
@@ -32,7 +32,6 @@ const draw = () => {
 
 const updateGrid = () => {
     let out = fillGrid(limitXY, limitXY);
-
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
             let count = 0;
@@ -51,13 +50,13 @@ const updateGrid = () => {
 const getNeighbours = (x, y) => {
     /*
     code below returns absolute positions of neighbours of the point supplied in argument
-    two cells are neighbours if they share a corner OR if they are first and last in a row/column
+    two cells are neighbours if they share a corner; neighbourship spans across grid boundaries (so a point at x=0 can be neighbour of a point at x=max)
     the items of the returned list are arranged same way they would be in a grid
     */
     return [
-        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y - 1 < 0) ? limitXY - 1 : y - 1], [x, (y - 1 < 0) ? limitXY - 1 : y - 1], [(x + 1 >= limitXY) ? 0 : x + 1, (y - 1 < 0) ? limitXY - 1 : y - 1],
-        [(x - 1 < 0) ? limitXY - 1 : x - 1,                             y    ],                                         [(x + 1 >= limitXY) ? 0 : x + 1,                             y    ],
-        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y + 1 >= limitXY) ? 0    : y + 1], [x, (y + 1 >= limitXY) ? 0    : y + 1], [(x + 1 >= limitXY) ? 0 : x + 1, (y + 1 >= limitXY) ? 0    : y + 1]
+        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y - 1 < 0) ? limitXY - 1 : y - 1], [x, (y - 1 < 0) ? limitXY - 1 : y - 1], [(x + 1 === limitXY) ? 0 : x + 1, (y - 1 < 0) ? limitXY - 1 : y - 1],
+        [(x - 1 < 0) ? limitXY - 1 : x - 1,                             y    ],                                         [(x + 1 === limitXY) ? 0 : x + 1,                             y    ],
+        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y + 1 === limitXY) ?   0 : y + 1], [x, (y + 1 === limitXY) ?   0 : y + 1], [(x + 1 === limitXY) ? 0 : x + 1, (y + 1 === limitXY) ?   0 : y + 1]
     ];
 };
 
