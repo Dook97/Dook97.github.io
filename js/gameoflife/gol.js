@@ -4,14 +4,14 @@ let canvas,
     scale = 10, // edge MUST be divisible by scale
     limitXY = edge/scale,
     grid,
-    interval = 100;
+    interval = 30;
 
 window.addEventListener('load', () => {
     canvas = document.querySelector('canvas');
     canvas.setAttribute('width', edge);
     canvas.setAttribute('height', edge);
     context = canvas.getContext('2d');
-    grid = fillGrid();
+    grid = fillGrid(limitXY, limitXY);
 
     setInterval(() => grid = updateGrid(), interval);
     draw();
@@ -28,7 +28,7 @@ const draw = () => {
 };
 
 const updateGrid = () => {
-    let out = fillGrid();
+    let out = fillGrid(limitXY, limitXY);
 
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
@@ -46,27 +46,24 @@ const updateGrid = () => {
 };
 
 const getNeighbours = (x, y) => {
-    let neigbours = [
-        [x-1,y-1],[x,y-1],[x+1,y-1],
-        [x-1,y  ],        [x+1,y  ],
-        [x-1,y+1],[x,y+1],[x+1,y+1]
+    /*
+    code below returns absolute positions of neighbours of the point supplied in argument
+    two cells are neighbours if they share a corner OR if they are first and last in a row/column
+    the items of the returned list are arranged same way they would be in a grid
+    */
+    return [
+        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y - 1 < 0) ? limitXY - 1 : y - 1], [x, (y - 1 < 0) ? limitXY - 1 : y - 1], [(x + 1 >= limitXY) ? 0 : x + 1, (y - 1 < 0) ? limitXY - 1 : y - 1],
+        [(x - 1 < 0) ? limitXY - 1 : x - 1,                             y    ],                                         [(x + 1 >= limitXY) ? 0 : x + 1,                             y    ],
+        [(x - 1 < 0) ? limitXY - 1 : x - 1, (y + 1 >= limitXY) ? 0    : y + 1], [x, (y + 1 >= limitXY) ? 0    : y + 1], [(x + 1 >= limitXY) ? 0 : x + 1, (y + 1 >= limitXY) ? 0    : y + 1]
     ];
-    let out = []
 
-    for (let i = 0; i < neigbours.length; i++) {
-        if (neigbours[i][0] >= 0 && neigbours[i][1] >= 0 && neigbours[i][0] < limitXY && neigbours[i][1] < limitXY) {
-            out.push(neigbours[i]);
-        }
-    }
-    return out;
 };
 
-const fillGrid = () => {
+const fillGrid = (x, y) => {
     let out = [];
-
-    for (let i = 0; i < limitXY; i++) {
+    for (let i = 0; i < x; i++) {
         out.push(new Array());
-        for (let j = 0; j < limitXY; j++) {
+        for (let j = 0; j < y; j++) {
             out[i].push(false);
         }
     }
