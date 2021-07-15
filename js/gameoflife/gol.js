@@ -1,27 +1,30 @@
-let canvas,
-    context,
+let context,
     edge = 750,
     scale = 10, // edge MUST be divisible by scale
     limitXY = edge/scale,
-    grid,
-    interval = 30;
+    grid;
 
 window.addEventListener('load', () => {
-    canvas = document.querySelector('canvas');
+    let canvas = document.querySelector('canvas'),
+        interval = 30;
+    
+    grid = fillGrid(limitXY, limitXY);
     canvas.setAttribute('width', edge);
     canvas.setAttribute('height', edge);
     context = canvas.getContext('2d');
-    grid = fillGrid(limitXY, limitXY);
+    context.fillStyle = 'green';
 
     setInterval(() => grid = updateGrid(), interval);
     draw();
 });
 
 const draw = () => {
+    context.clearRect(0, 0, edge, edge);
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
-            context.fillStyle = grid[x][y] ? 'green' : 'black';
-            context.fillRect(x*scale, y*scale, scale, scale);
+            if (grid[x][y]) {
+                context.fillRect(x*scale, y*scale, scale, scale);
+            }
         }
     }
     requestAnimationFrame(draw);
@@ -56,7 +59,6 @@ const getNeighbours = (x, y) => {
         [(x - 1 < 0) ? limitXY - 1 : x - 1,                             y    ],                                         [(x + 1 >= limitXY) ? 0 : x + 1,                             y    ],
         [(x - 1 < 0) ? limitXY - 1 : x - 1, (y + 1 >= limitXY) ? 0    : y + 1], [x, (y + 1 >= limitXY) ? 0    : y + 1], [(x + 1 >= limitXY) ? 0 : x + 1, (y + 1 >= limitXY) ? 0    : y + 1]
     ];
-
 };
 
 const fillGrid = (x, y) => {
