@@ -1,4 +1,4 @@
-# Dook97.github.io
+# π approximator
 
 A little script I made to approximate π in what I think is a nice visual way.
 
