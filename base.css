@@ -3,21 +3,34 @@ body {
     color: grey;
 }
 
-.centered {
-    text-align: center;
-}
-
-.monospace {
-    font-family: monospace;
-}
-
 footer {
     font-size: xx-small;
-    position : absolute;
-    bottom : 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+footer:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 a {
     text-decoration: none;
     color: green;
 }
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+.centered { text-align: center; }
+
+.right-aligned { text-align: right; }
+
+.monospace { font-family: monospace; }
+
+#wrapper { padding: 15px 10px; }
