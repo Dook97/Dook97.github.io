@@ -1,21 +1,20 @@
 let context;
-let edge;
+const edge = 750; // dont fuck with this - webpage layout depends on this being 750px
 const scale = 10; // edge MUST be divisible by scale
 let limitXY;
 let grid;
 let interval;
 let paused = true;
+let generation = 0;
 
 window.addEventListener('load', () => {
     const canvas = document.querySelector('canvas');
     const slider = document.querySelector('input');
-    const table = document.querySelector('table');
-    const inputCell = document.querySelector('#input-cell');
 
-    edge = canvas.getAttribute('width');
     limitXY = edge / scale;
     context = canvas.getContext('2d');
     context.fillStyle = 'green';
+    context.strokeStyle = 'black';
     grid = fillGrid(limitXY, limitXY);
     interval = 10 * 2 ** slider.value;
 
@@ -35,6 +34,7 @@ window.addEventListener('load', () => {
 const loop = () => {
     setTimeout(() => {
         if (!paused) {
+            generation++;
             grid = updateGrid();
         }
         loop();
@@ -46,23 +46,22 @@ const draw = () => {
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
             if (grid[x][y]) {
-                context.fillRect(x * scale, y * scale, scale, scale);
+                context.fillRect(x * scale + 1, y * scale + 1, scale - 1, scale - 1);
             }
         }
     }
+    if (!paused) {
+        document.querySelector('#status').innerText = 'running';
+    } else {
+        document.querySelector('#status').innerText = 'paused';
+    }
+    document.querySelector('#generation').textContent = `${generation}`;
     requestAnimationFrame(draw);
 };
 
-document.addEventListener('keypress', e => {
-    if (e.key === 's') {
-        paused = !paused;
-    } else if (e.key === 'c') {
-        grid = fillGrid(limitXY, limitXY);
-    }
-});
-
 const updateGrid = () => {
     let out = fillGrid(limitXY, limitXY);
+    let changed = false;
     for (let x = 0; x < limitXY; x++) {
         for (let y = 0; y < limitXY; y++) {
             let count = 0;
@@ -73,10 +72,26 @@ const updateGrid = () => {
                 }
             }
             out[x][y] = (grid[x][y] && count === 2) || count === 3;
+            if (out[x][y] !== grid[x][y]) {
+                changed = true;
+            }
         }
+    }
+    if (!changed) {
+        paused = true;
     }
     return out;
 };
+
+document.addEventListener('keypress', e => {
+    if (e.key === 's') {
+        paused = !paused;
+    } else if (e.key === 'c') {
+        paused = true;
+        grid = fillGrid(limitXY, limitXY);
+        generation = 0;
+    }
+});
 
 const getNeighbours = (x, y) => {
     // prettier-ignore

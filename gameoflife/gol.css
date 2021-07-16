@@ -1,6 +1,23 @@
+#box {
+    display: flex;
+}
+
+#left-panel {
+    margin-left: auto;
+}
+
+#right-panel {
+    margin-right: auto;
+}
+
+.help {
+    flex: 0 1 500px;
+    padding: 15px;
+}
+
 .help section {
     text-align: left;
-    padding: 0px 10px 10px 10px;
+    padding: 10px;
     margin: 0;
     background-color: rgb(15, 15, 15);
     border-bottom: 15px solid black;
@@ -11,13 +28,24 @@
     font-size: 35px;
     font-weight: lighter;
     font-family: monospace;
-    padding: 0px 10px 0px 10px;
+    text-align: center;
+    padding: 0px 10px;
 }
 
 .help h3 {
     margin: 0;
     padding: 15px;
     font-size: 25px;
+}
+
+#middle {
+    flex: none;
+    height: max-content;
+}
+
+#middle > canvas {
+    border: 1px solid grey;
+    margin-top: 15px;
 }
 
 #speed-panel {
@@ -41,30 +69,31 @@
     width: 100%;
 }
 
-#box {
-    display: flex;
+#shapes > tbody > tr:hover {
+    outline: 10px solid green;
+    outline-style: ridge;
 }
 
-#left-panel {
-    padding: 15px 0px 15px 15px;
-    margin-left: auto;
+#shapes {
+    width: 100%;
+    text-align: center;
+    font-family: monospace;
+    font-size: larger;
+    cursor: pointer;
 }
 
-#right-panel {
-    padding: 15px 15px 15px 0px;
-    margin-right: auto;
+#shapes > tbody > tr > td {
+    width: 50%;
+    padding: 10px;
 }
 
-.sides {
-    flex: 0 1 500px;
+#shapes table {
+    display: inline-table;
 }
 
-#middle {
-    flex: none;
-    height: max-content;
-}
-
-#middle > canvas {
-    border: 1px solid grey;
-    margin-top: 15px;
+#shapes table td {
+    min-width: 3px;
+    min-height: 3px;
+    width: 3px;
+    height: 3px;
 }
