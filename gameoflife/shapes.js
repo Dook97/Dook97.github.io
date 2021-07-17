@@ -13,6 +13,13 @@ const shapes = [
         '#.#',
         '###',
     ],
+    // penta-decathlon
+    //prettier-ignore
+    [
+        '.#..#.##.#..#.',
+        '##..#....#..##',
+        '.#..#.##.#..#.'
+    ],
     //LWSS
     //prettier-ignore
     [
@@ -52,4 +59,4 @@ const shapes = [
     ],
 ];
 
-const names = ['r-pentonimo', "'U'", 'LWSS', 'pulzar', 'glider gun'];
+const names = ['r-pentonimo', "'U'", 'penta-decathlon', 'LWSS', 'pulzar', 'glider gun'];
