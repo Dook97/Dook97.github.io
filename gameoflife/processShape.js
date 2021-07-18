@@ -1,14 +1,14 @@
 window.addEventListener('load', () => {
-    for (let i = 0; i < shapes.length; i++) {
-        writeShape(shapes[i], names[i]);
+    for (const key of Object.keys(shapes)) {
+        writeShape(shapes[key], key);
     }
-    let shapeElements = document.querySelectorAll('#shapes > tbody > tr');
-    for (let i = 0; i < shapeElements.length; i++) {
-        shapeElements[i].addEventListener('click', () => {
+    let shapeContainer = document.querySelectorAll('#shapes > tbody > tr');
+    for (let i = 0; i < shapeContainer.length; i++) {
+        shapeContainer[i].addEventListener('click', () => {
             paused = true;
             generation = 0;
             grid = fillGrid(limitXY, limitXY);
-            importShape(shapes[i]);
+            importShape(shapes[Object.keys(shapes)[i]]);
         });
     }
 });
@@ -57,8 +57,7 @@ const exportShape = () => {
 };
 
 const writeShape = (shape, name) => {
-    const shapesWrap = document.querySelector('#shapes > tbody');
-    shapesWrap.innerHTML += `
+    document.querySelector('#shapes > tbody').innerHTML += `
         <tr>
             <td>
                 <p>${name}</p>
