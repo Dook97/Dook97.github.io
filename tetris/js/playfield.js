@@ -13,11 +13,22 @@ class Playfield {
         }
     }
 
-    checkCellAvailability = position => {
-        if (position.x >= 0 && position.x < this.xSize && position.y < this.ySize) {
-            return !this.grid[position.y][position.x];
+    checkCellAvailability = position => (position.x >= 0 && position.x < this.xSize && position.y < this.ySize ? !this.grid[position.y][position.x] : false);
+
+    deleteFullRows = () => {
+        let fullRowsIndexes = this.findFullRowsIndexes();
+        for (let i = 0; i < fullRowsIndexes.length; i++) {
+            this.grid.splice(fullRowsIndexes[i], 1);
+            this.grid = [new Array(this.xSize).fill(''), ...this.grid];
         }
-        return false;
+        return fullRowsIndexes.length;
+    };
+
+    findFullRowsIndexes = () => {
+        let out = [];
+        this.grid.forEach((_, i, arr) => out = arr[i].every(val => Boolean(val)) ? [...out, i] : out);
+        console.log(out);
+        return out;
     };
 
     reserveCell = (position, color) => {

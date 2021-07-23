@@ -3,7 +3,7 @@
 class Cell {
     constructor(color, position) {
         this.color = color;
-        this.relativePosition = position; // relative to parent cluster top left corner (cluster.pos)
+        this.relativePosition = position; // relative to parent cluster top left corner (cluster.position)
     }
 
     move = vector => {

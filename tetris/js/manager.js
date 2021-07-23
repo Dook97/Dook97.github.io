@@ -7,17 +7,19 @@ class Manager {
         this.playfield = playfield;
         this.activeCluster = this.prepareNewCluster(...this.getRandClusterArgs());
         this.preparedCluster = this.prepareNewCluster(...this.getRandClusterArgs());
+        this.score = 0;
         this.setEvents();
     }
 
     loop = () => {
         setTimeout(() => {
-            this.painter.getCluster(this.activeCluster);
             if (!this.activeCluster.move({ x: 0, y: 1 })) {
                 //console.log(this.activeCluster.position);
                 this.activeCluster.freeze();
                 this.changeActiveCluster();
+                this.score += 10 * 2 ** this.playfield.deleteFullRows();
             }
+            this.painter.getCluster(this.activeCluster);
             this.loop();
         }, this.tick);
     };

@@ -1,37 +1,38 @@
 'use strict';
 
 class Painter {
-    constructor(playfield) {
-        this.colors = ['#0341AE', '#72CB3B', '#FFD500', '#FF971C', '#FF3213'];
+    constructor(playfield, yOffset, colors) {
+        this.colors = colors;
         this.canvas = document.querySelector('canvas');
+        this.yOffset = yOffset;
         this.scaleX = this.canvas.width / playfield.xSize;
-        this.scaleY = this.canvas.height / playfield.ySize;
+        this.scaleY = this.canvas.height / (playfield.ySize - yOffset);
         this.context = this.canvas.getContext('2d');
         this.playfield = playfield;
-        this.cluster = new Object();
+        this.cluster;
     }
 
     getCluster = cluster => this.cluster = cluster;
 
     paint = () => {
-        this.context.clearRect(0, 0, this.scaleX * 10, this.scaleY * 20);
+        this.context.clearRect(0, 0, this.scaleX * this.playfield.xSize, this.scaleY * (this.playfield.ySize - this.yOffset));
         for (let i = 0; i < this.playfield.grid.length; i++) {
             for (let j = 0; j < this.playfield.grid[i].length; j++) {
                 if (this.playfield.grid[i][j]) {
                     this.context.fillStyle = this.playfield.grid[i][j];
-                    this.context.fillRect(j * this.scaleY + 1, i * this.scaleX + 1, this.scaleX - 1, this.scaleY - 1);
+                    this.context.fillRect(j * this.scaleX + 1, (i - this.yOffset) * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1);
                 }
             }
         }
-        for (const cell of this.cluster.children) {
+        this.cluster.children.forEach(cell => {
             this.context.fillStyle = cell.color;
             this.context.fillRect(
                 (this.cluster.position.x + cell.relativePosition.x) * this.scaleX + 1,
-                (this.cluster.position.y + cell.relativePosition.y) * this.scaleY + 1,
+                (this.cluster.position.y + cell.relativePosition.y - this.yOffset) * this.scaleY + 1,
                 this.scaleX - 1,
                 this.scaleY - 1
             );
-        }
+        });
         requestAnimationFrame(this.paint);
     };
 }
