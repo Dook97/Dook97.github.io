@@ -1,7 +1,8 @@
 'use strict';
 
 class Manager {
-    constructor(painter, playfield) {
+    constructor(painter, playfield, tick) {
+        this.tick = tick;
         this.painter = painter;
         this.playfield = playfield;
         this.activeCluster = this.prepareNewCluster(...this.getRandClusterArgs());
@@ -9,41 +10,45 @@ class Manager {
         this.setEvents();
     }
 
+    loop = () => {
+        setTimeout(() => {
+            this.painter.getCluster(this.activeCluster);
+            if (!this.activeCluster.move({ x: 0, y: 1 })) {
+                //console.log(this.activeCluster.position);
+                this.activeCluster.freeze();
+                this.changeActiveCluster();
+            }
+            this.loop();
+        }, this.tick);
+    };
+
     changeActiveCluster = () => {
         this.activeCluster = this.preparedCluster;
         this.preparedCluster = this.prepareNewCluster(...this.getRandClusterArgs());
     };
 
-    getRandClusterArgs = () => [['I', 'J', 'L', 'O', 'S', 'T', 'Z'][Math.floor(Math.random() * 7)], this.painter.colors[Math.floor(Math.random() * this.colors.length)]];
+    getRandClusterArgs = () => [['I', 'J', 'L', 'O', 'S', 'T', 'Z'][Math.floor(Math.random() * 7)], this.painter.colors[Math.floor(Math.random() * this.painter.colors.length)]];
 
     prepareNewCluster = (type, color) => {
-        this.preparedCluster =
-            type === 'I'
-                ? new I(color, this.playfield)
-                : type === 'J'
-                ? new J(color, this.playfield)
-                : type === 'L'
-                ? new L(color, this.playfield)
-                : type === 'O'
-                ? new O(color, this.playfield)
-                : type === 'S'
-                ? new S(color, this.playfield)
-                : type === 'T'
-                ? new T(color, this.playfield)
-                : new Z(color, this.playfield);
+        if (type === 'I') return new I(color, this.playfield);
+        if (type === 'J') return new J(color, this.playfield);
+        if (type === 'L') return new L(color, this.playfield);
+        if (type === 'O') return new O(color, this.playfield);
+        if (type === 'S') return new S(color, this.playfield);
+        if (type === 'T') return new T(color, this.playfield);
+        if (type === 'Z') return new Z(color, this.playfield);
     };
 
     setEvents = () => {
         document.addEventListener('keypress', e => {
-            e.key === 'ArrowDown'
-                ? this.activeCluster.rotate(-1) // left rotate
-                : e.key === 'ArrowUp'
-                ? this.activeCluster.rotate(1) // right rotate
-                : e.key === 'ArrowLeft'
-                ? this.activeCluster.move({ x: -1, y: 0 }) // left move
-                : e.key === 'ArrowRight'
-                ? this.activeCluster.move({ x: 1, y: 0 }) // right move
-                : this.activeCluster.drop();
+            // right rotate
+            if (e.key === 'w') this.activeCluster.rotate();
+            // left move
+            else if (e.key === 'a') this.activeCluster.move({ x: -1, y: 0 });
+            // right move
+            else if (e.key === 'd') this.activeCluster.move({ x: 1, y: 0 });
+            // drop
+            else if (e.key === 's') this.activeCluster.drop();
         });
     };
 }
