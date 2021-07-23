@@ -14,7 +14,6 @@ class Manager {
     loop = () => {
         setTimeout(() => {
             if (!this.activeCluster.move({ x: 0, y: 1 })) {
-                //console.log(this.activeCluster.position);
                 this.activeCluster.freeze();
                 this.changeActiveCluster();
                 this.score += 10 * 2 ** this.playfield.deleteFullRows();

@@ -24,13 +24,14 @@ class Cluster {
 
     rotate = () => {
         this.rotationIndex = (this.rotationIndex + 1) % this.rotations.length;
-        this.children.forEach((v, i) => v.moveTo(this.rotations[this.rotationIndex][i]));
+        if (this.rotations[this.rotationIndex].every(v => this.playfield.checkCellAvailability({ x: this.position.x + v.x, y: this.position.y + v.y }))) {
+            this.children.forEach((v, i) => v.moveTo(this.rotations[this.rotationIndex][i]));
+        }
     };
 
     checkMoveLegality = vector => {
         for (const child of this.children) {
             if (!this.playfield.checkCellAvailability({ x: this.position.x + child.relativePosition.x + vector.x, y: this.position.y + child.relativePosition.y + vector.y })) {
-                //console.log(`err: invalid move arg "x:${vector.x}, y:${vector.y}" (out of bounds)`);
                 return false;
             }
         }
