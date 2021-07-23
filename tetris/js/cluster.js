@@ -2,16 +2,22 @@
 
 class Cluster {
     constructor(color, playfield) {
-        this.children;
         this.color = color;
         this.playfield = playfield;
+        this.children = [];
         this.rotationIndex = 0;
         this.position = { x: 0, y: 0 };
     }
 
-    getChildren = (positions, color) => {
+    freeze = () => {
+        for (const child of this.children) {
+            this.playfield.reserveCell({ x: this.position.x + child.relativePosition.x, y: this.position.y + child.relativePosition.y }, child.color);
+        }
+    };
+
+    getChildren = positions => {
         for (const position of positions) {
-            this.children = [...this.children, new Cell(color, position)];
+            this.children = [...this.children, new Cell(this.color, position)];
         }
     };
 
@@ -31,10 +37,9 @@ class Cluster {
     };
 
     move = vector => {
-        if (checkMoveLegality(vector)) {
-            for (const child of children) {
-                child.move(vector);
-            }
+        if (this.checkMoveLegality(vector)) {
+            this.position.x += vector.x;
+            this.position.y += vector.y;
         }
     };
 

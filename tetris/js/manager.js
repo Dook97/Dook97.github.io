@@ -1,8 +1,9 @@
 'use strict';
 
 class Manager {
-    constructor() {
-        this.painter = new Painter();
+    constructor(painter, playfield) {
+        this.painter = painter;
+        this.playfield = playfield;
         this.activeCluster = this.prepareNewCluster(...this.getRandClusterArgs());
         this.preparedCluster = this.prepareNewCluster(...this.getRandClusterArgs());
         this.setEvents();
@@ -18,18 +19,18 @@ class Manager {
     prepareNewCluster = (type, color) => {
         this.preparedCluster =
             type === 'I'
-                ? new I(color, this)
+                ? new I(color, this.playfield)
                 : type === 'J'
-                ? new J(color, this)
+                ? new J(color, this.playfield)
                 : type === 'L'
-                ? new L(color, this)
+                ? new L(color, this.playfield)
                 : type === 'O'
-                ? new O(color, this)
+                ? new O(color, this.playfield)
                 : type === 'S'
-                ? new S(color, this)
+                ? new S(color, this.playfield)
                 : type === 'T'
-                ? new T(color, this)
-                : new Z(color, this);
+                ? new T(color, this.playfield)
+                : new Z(color, this.playfield);
     };
 
     setEvents = () => {

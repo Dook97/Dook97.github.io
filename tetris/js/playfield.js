@@ -2,8 +2,10 @@
 
 class Playfield {
     constructor(xSize, ySize) {
-        this.grid = new Array(ySize).fill(new Array(xSize).fill({ present: false, color: undefined }));
+        this.grid = new Array(xSize).fill(new Array(ySize).fill({ present: false, color: undefined }));
     }
 
-    checkCellAvailability = pos => !grid[pos.x][pos.y].present;
+    checkCellAvailability = position => !grid[position.x][position.y].present;
+
+    reserveCell = (position, color) => this.grid[position.x][position.y] = { present: true, color: color };
 }
