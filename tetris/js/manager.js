@@ -3,6 +3,7 @@
 class Manager {
     constructor(painter, playfield, tick) {
         this.tick = tick;
+        this.defaultTick = tick;
         this.painter = painter;
         this.playfield = playfield;
         this.activeCluster = this.prepareNewCluster(...this.getRandClusterArgs());
@@ -13,10 +14,16 @@ class Manager {
 
     loop = () => {
         setTimeout(() => {
+            this.tick = this.defaultTick;
             if (!this.activeCluster.move({ x: 0, y: 1 })) {
                 this.activeCluster.freeze();
                 this.changeActiveCluster();
                 this.score += 10 * 2 ** this.playfield.deleteFullRows();
+                this.tick = 0;
+                if (this.playfield.checkGameEndCondition()) {
+                    this.painter.gameStatus = false;
+                    return;
+                }
             }
             this.painter.getCluster(this.activeCluster);
             this.loop();

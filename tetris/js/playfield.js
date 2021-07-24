@@ -1,9 +1,10 @@
 'use strict';
 
 class Playfield {
-    constructor(xSize, ySize) {
+    constructor(xSize, ySize, yOffset) {
         this.xSize = xSize;
         this.ySize = ySize;
+        this.yOffset = yOffset;
         this.grid = [];
         for (let i = 0; i < ySize; i++) {
             this.grid.push([]);
@@ -14,6 +15,14 @@ class Playfield {
     }
 
     checkCellAvailability = position => (position.x >= 0 && position.x < this.xSize && position.y < this.ySize ? !this.grid[position.y][position.x] : false);
+
+    checkGameEndCondition = () => {
+        if (!this.grid[this.yOffset].every(value => !value)) {
+            console.log('game over!');
+            return true;
+        }
+        return false;
+    };
 
     deleteFullRows = () => {
         let fullRowsIndexes = this.findFullRowsIndexes();
@@ -27,7 +36,6 @@ class Playfield {
     findFullRowsIndexes = () => {
         let out = [];
         this.grid.forEach((_, i, arr) => out = arr[i].every(val => Boolean(val)) ? [...out, i] : out);
-        console.log(out);
         return out;
     };
 

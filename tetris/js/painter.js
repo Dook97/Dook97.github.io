@@ -9,6 +9,7 @@ class Painter {
         this.scaleY = this.canvas.height / (playfield.ySize - yOffset);
         this.context = this.canvas.getContext('2d');
         this.playfield = playfield;
+        this.gameStatus = true; // true for running false for the opposite
         this.cluster;
     }
 
@@ -33,6 +34,18 @@ class Painter {
                 this.scaleY - 1
             );
         });
+        if (!this.gameStatus) {
+            this.paintEndGame();
+        }
         requestAnimationFrame(this.paint);
+    };
+
+    paintEndGame = () => {
+        this.context.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        this.context.fillRect(0, this.canvas.height / 2 - 50, this.canvas.width, 75);
+        this.context.fillStyle = 'green';
+        this.context.textAlign = 'center';
+        this.context.font = '50px monospace';
+        this.context.fillText('game over', this.canvas.width / 2, this.canvas.height / 2);
     };
 }

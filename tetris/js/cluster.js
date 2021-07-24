@@ -23,9 +23,10 @@ class Cluster {
     };
 
     rotate = () => {
-        this.rotationIndex = (this.rotationIndex + 1) % this.rotations.length;
-        if (this.rotations[this.rotationIndex].every(v => this.playfield.checkCellAvailability({ x: this.position.x + v.x, y: this.position.y + v.y }))) {
-            this.children.forEach((v, i) => v.moveTo(this.rotations[this.rotationIndex][i]));
+        let newRotationIndex = (this.rotationIndex + 1) % this.rotations.length;
+        if (this.rotations[newRotationIndex].every(value => this.playfield.checkCellAvailability({ x: this.position.x + value.x, y: this.position.y + value.y }))) {
+            this.rotationIndex = newRotationIndex;
+            this.children.forEach((child, i) => child.moveTo(this.rotations[this.rotationIndex][i]));
         }
     };
 
@@ -65,7 +66,7 @@ class I extends Cluster {
             [{x : 1, y : 0}, {x : 1, y : 1}, {x : 1, y : 2}, {x : 1, y : 3}],
         ];
         this.getChildren();
-        this.position = { x: 3, y: 2 };
+        this.position = { x: 3, y: 1 };
     }
 }
 
@@ -80,7 +81,7 @@ class J extends Cluster {
             [{x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}, {x : 2, y : 2}]
         ];
         this.getChildren();
-        this.position = { x: 3, y: 1 };
+        this.position = { x: 3, y: 0 };
     }
 }
 
@@ -95,7 +96,7 @@ class L extends Cluster {
             [{x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}, {x : 2, y : 0}]
         ];
         this.getChildren();
-        this.position = { x: 3, y: 1 };
+        this.position = { x: 3, y: 0 };
     }
 }
 
@@ -107,7 +108,7 @@ class O extends Cluster {
             [{x : 0, y : 0}, {x : 1, y : 0}, {x : 0, y : 1}, {x : 1, y : 1}]
         ];
         this.getChildren();
-        this.position = { x: 4, y: 2 };
+        this.position = { x: 4, y: 1 };
     }
 }
 
@@ -122,7 +123,7 @@ class S extends Cluster {
             [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}],
         ];
         this.getChildren();
-        this.position = { x: 2, y: 2 };
+        this.position = { x: 2, y: 1 };
     }
 }
 
@@ -137,7 +138,7 @@ class T extends Cluster {
             [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}],
         ];
         this.getChildren();
-        this.position = { x: 3, y: 2 };
+        this.position = { x: 3, y: 1 };
     }
 }
 
@@ -152,6 +153,6 @@ class Z extends Cluster {
             [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 0, y: 2}],
         ];
         this.getChildren();
-        this.position = { x: 4, y: 2 };
+        this.position = { x: 4, y: 1 };
     }
 }
