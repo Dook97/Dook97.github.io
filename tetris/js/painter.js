@@ -5,18 +5,18 @@ class Painter {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.playfield = playfield;
-        this.cluster;
+        this.cluster; // active tetromino
 
-        this.colors = colors;
-        this.yOffset = yOffset;
-        this.scaleX = canvas.width / playfield.xSize;
-        this.scaleY = canvas.height / (playfield.ySize - yOffset);
+        this.colors = colors; // tetrominos colors
+        this.yOffset = yOffset; // number of invisible rows used for spawning of new tetrominos
+        this.scaleX = canvas.width / playfield.xSize; // width of one cell
+        this.scaleY = canvas.height / (playfield.ySize - yOffset); // height of one cell
         this.gameStatus = true; // true for running false for the opposite
     }
 
-    getCluster = cluster => this.cluster = cluster;
-
+    // main graphics method
     paint = () => {
+        this.ctx.clearRect(0, 0, this.scaleX * this.playfield.xSize, this.scaleY * (this.playfield.ySize - this.yOffset));
         this.paintFrozenCells();
         this.paintActiveCluster();
         if (!this.gameStatus) {
@@ -26,7 +26,6 @@ class Painter {
     };
 
     paintFrozenCells = () => {
-        this.ctx.clearRect(0, 0, this.scaleX * this.playfield.xSize, this.scaleY * (this.playfield.ySize - this.yOffset));
         for (let i = 0; i < this.playfield.grid.length; i++) {
             for (let j = 0; j < this.playfield.grid[i].length; j++) {
                 if (this.playfield.grid[i][j]) {
@@ -49,8 +48,9 @@ class Painter {
         });
     };
 
+    // paint a 'game over' banner
     paintEndGame = () => {
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.95)';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.90)';
         this.ctx.fillRect(0, this.canvas.height / 2 - 50, this.canvas.width, 75);
         this.ctx.fillStyle = 'green';
         this.ctx.textAlign = 'center';

@@ -2,9 +2,9 @@
 
 class Playfield {
     constructor(xSize, ySize, yOffset) {
-        this.xSize = xSize;
-        this.ySize = ySize;
-        this.yOffset = yOffset;
+        this.xSize = xSize; // grid width
+        this.ySize = ySize; // grid height - yOffset included
+        this.yOffset = yOffset; // number of invisible rows used for spawning of new tetrominos
         this.grid = [];
         for (let i = 0; i < ySize; i++) {
             this.grid.push(new Array(xSize).fill(''));
