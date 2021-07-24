@@ -3,13 +3,18 @@
 class Playfield {
     constructor(xSize, ySize, yOffset) {
         this.xSize = xSize; // grid width
-        this.ySize = ySize; // grid height - yOffset included
+        this.ySize = ySize + yOffset; // grid height - yOffset included
         this.yOffset = yOffset; // number of invisible rows used for spawning of new tetrominos
-        this.grid = [];
-        for (let i = 0; i < ySize; i++) {
-            this.grid.push(new Array(xSize).fill(''));
-        }
+        this.grid = this.makeEmptyGrid();
     }
+
+    makeEmptyGrid = () => {
+        let grid = [];
+        for (let i = 0; i < this.ySize; i++) {
+            grid.push(new Array(this.xSize).fill(''));
+        }
+        return grid;
+    };
 
     checkCellAvailability = position => (position.x >= 0 && position.x < this.xSize && position.y < this.ySize ? !this.grid[position.y][position.x] : false);
 
