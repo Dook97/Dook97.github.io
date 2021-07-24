@@ -2,12 +2,12 @@
 
 class Cluster {
     constructor(color, playfield) {
-        this.color = color; // tetromino color inherited by its cells
+        this.color = color; // tetromino color
         this.playfield = playfield;
         this.children = [];
         this.rotationIndex = 0;
         this.position = { x: 0, y: 0 }; // top left corner of the imaginary tetromino container
-        this.rotations; // array of all possible rotations - specified in child classes
+        this.rotations; // array of all possible rotations - specified in descendant classes
     }
 
     freeze = () => {

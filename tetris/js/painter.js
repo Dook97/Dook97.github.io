@@ -9,6 +9,7 @@ class Painter {
         this.sideCtx = sideCanvas.getContext('2d');
         this.sideScaleX = sideCanvas.width / 4;
         this.sideScaleY = sideCanvas.height / 3;
+        this.sideCtx.fillStyle = 'green';
 
         this.playfield = playfield;
         this.cluster; // active tetromino
@@ -26,13 +27,14 @@ class Painter {
     paint = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.sideCtx.clearRect(0, 0, this.sideCanvas.width, this.sideCanvas.height);
+        this.highlightActiveColumns();
         this.paintFrozenCells();
         this.paintActiveCluster();
         this.paintNextCluster();
         if (this.gameStatus === 'paused') {
-            this.paintPause();
+            this.paintBanner('Paused');
         } else if (this.gameStatus === 'end') {
-            this.paintEndGame();
+            this.paintBanner('Game Over');
         }
         requestAnimationFrame(this.paint);
     };
@@ -54,7 +56,6 @@ class Painter {
     };
 
     paintNextCluster = () => {
-        this.sideCtx.fillStyle = 'green';
         this.nextCluster.rotations[0].forEach(val => {
             this.sideCtx.fillRect(val.x * this.sideScaleX + 1, val.y * this.sideScaleY + 1, this.sideScaleX - 1, this.sideScaleY - 1);
         });
@@ -75,12 +76,10 @@ class Painter {
         this.ctx.fillRect(position.x * this.scaleX + 1, position.y * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1);
     };
 
-    paintEndGame = () => {
-        this.paintBanner('Game Over');
-    };
-
-    paintPause = () => {
-        this.paintBanner('Paused');
+    // highlits columns of the canvas in which there are cells of an active cluster
+    highlightActiveColumns = () => {
+        this.ctx.fillStyle = 'rgb(7, 7, 7)';
+        this.cluster.children.forEach(cell => this.ctx.fillRect((this.cluster.position.x + cell.relativePosition.x) * this.scaleX, 0, this.scaleX, this.canvas.height));
     };
 
     paintBanner = text => {
