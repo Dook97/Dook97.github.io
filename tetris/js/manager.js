@@ -1,13 +1,15 @@
 'use strict';
 
 class Manager {
-    constructor(painter, playfield, tick) {
-        this.tick = tick;
-        this.defaultTick = tick;
-        this.painter = painter;
-        this.playfield = playfield;
+    constructor(tick, xSize, ySize, yOffset, colors) {
+        this.playfield = new Playfield(xSize, ySize + yOffset, yOffset);
+        this.painter = new Painter(this.playfield, yOffset, colors, document.querySelector('canvas'));
+
         this.activeCluster = this.prepareNewCluster(...this.getRandClusterArgs());
         this.preparedCluster = this.prepareNewCluster(...this.getRandClusterArgs());
+
+        this.tick = tick;
+        this.defaultTick = tick;
         this.score = 0;
         this.setEvents();
     }

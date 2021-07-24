@@ -7,22 +7,13 @@ class Playfield {
         this.yOffset = yOffset;
         this.grid = [];
         for (let i = 0; i < ySize; i++) {
-            this.grid.push([]);
-            for (let j = 0; j < xSize; j++) {
-                this.grid[i].push('');
-            }
+            this.grid.push(new Array(xSize).fill(''));
         }
     }
 
     checkCellAvailability = position => (position.x >= 0 && position.x < this.xSize && position.y < this.ySize ? !this.grid[position.y][position.x] : false);
 
-    checkGameEndCondition = () => {
-        if (!this.grid[this.yOffset].every(value => !value)) {
-            console.log('game over!');
-            return true;
-        }
-        return false;
-    };
+    checkGameEndCondition = () => (this.grid[this.yOffset].every(value => !value) ? false : true); // if theres a cell at the top of the visible grid
 
     deleteFullRows = () => {
         let fullRowsIndexes = this.findFullRowsIndexes();

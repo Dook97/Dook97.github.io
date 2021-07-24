@@ -11,15 +11,11 @@ class Cluster {
     }
 
     freeze = () => {
-        for (const child of this.children) {
-            this.playfield.reserveCell({ x: this.position.x + child.relativePosition.x, y: this.position.y + child.relativePosition.y }, child.color);
-        }
+        this.children.forEach(child => this.playfield.reserveCell({ x: this.position.x + child.relativePosition.x, y: this.position.y + child.relativePosition.y }, child.color));
     };
 
     getChildren = () => {
-        for (const position of this.rotations[this.rotationIndex]) {
-            this.children.push(new Cell(this.color, position));
-        }
+        this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(this.color, position)));
     };
 
     rotate = () => {
@@ -30,14 +26,10 @@ class Cluster {
         }
     };
 
-    checkMoveLegality = vector => {
-        for (const child of this.children) {
-            if (!this.playfield.checkCellAvailability({ x: this.position.x + child.relativePosition.x + vector.x, y: this.position.y + child.relativePosition.y + vector.y })) {
-                return false;
-            }
-        }
-        return true;
-    };
+    checkMoveLegality = vector =>
+        this.children.every(child =>
+            this.playfield.checkCellAvailability({ x: this.position.x + child.relativePosition.x + vector.x, y: this.position.y + child.relativePosition.y + vector.y })
+        );
 
     move = vector => {
         if (this.checkMoveLegality(vector)) {
@@ -49,9 +41,7 @@ class Cluster {
     };
 
     drop = () => {
-        while (this.checkMoveLegality({ x: 0, y: 1 })) {
-            this.move({ x: 0, y: 1 });
-        }
+        while (this.move({ x: 0, y: 1 })) {}
     };
 }
 
@@ -63,7 +53,7 @@ class I extends Cluster {
             [{x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}, {x : 3, y : 1}],
             [{x : 2, y : 0}, {x : 2, y : 1}, {x : 2, y : 2}, {x : 2, y : 3}],
             [{x : 0, y : 2}, {x : 1, y : 2}, {x : 2, y : 2}, {x : 3, y : 2}],
-            [{x : 1, y : 0}, {x : 1, y : 1}, {x : 1, y : 2}, {x : 1, y : 3}],
+            [{x : 1, y : 0}, {x : 1, y : 1}, {x : 1, y : 2}, {x : 1, y : 3}]
         ];
         this.getChildren();
         this.position = { x: 3, y: 1 };
@@ -120,10 +110,10 @@ class S extends Cluster {
             [{x: 1, y: 0}, {x: 2, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
             [{x: 1, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 2, y: 2}],
             [{x: 1, y: 1}, {x: 2, y: 1}, {x: 0, y: 2}, {x: 1, y: 2}],
-            [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}],
+            [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}]
         ];
         this.getChildren();
-        this.position = { x: 2, y: 1 };
+        this.position = { x: 4, y: 1 };
     }
 }
 
@@ -135,7 +125,7 @@ class T extends Cluster {
             [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 2, y: 1}],
             [{x: 1, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 1, y: 2}],
             [{x: 0, y: 1}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 1, y: 2}],
-            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}],
+            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}]
         ];
         this.getChildren();
         this.position = { x: 3, y: 1 };
@@ -150,7 +140,7 @@ class Z extends Cluster {
             [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}],
             [{x: 2, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 1, y: 2}],
             [{x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}, {x: 2, y: 2}],
-            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 0, y: 2}],
+            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 0, y: 2}]
         ];
         this.getChildren();
         this.position = { x: 4, y: 1 };
