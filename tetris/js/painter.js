@@ -1,11 +1,18 @@
 'use strict';
 
 class Painter {
-    constructor(playfield, yOffset, colors, canvas, statusElements) {
+    constructor(playfield, yOffset, colors, canvas, sideCanvas, statusElements) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
+
+        this.sideCanvas = sideCanvas;
+        this.sideCtx = sideCanvas.getContext('2d');
+        this.sideScaleX = sideCanvas.width / 4;
+        this.sideScaleY = sideCanvas.height / 3;
+
         this.playfield = playfield;
         this.cluster; // active tetromino
+        this.nextCluster; // queued tetromino
 
         this.statusElements = statusElements;
         this.colors = colors; // tetrominos colors
@@ -17,9 +24,11 @@ class Painter {
 
     // main graphics method
     paint = () => {
-        this.ctx.clearRect(0, 0, this.scaleX * this.playfield.xSize, this.scaleY * (this.playfield.ySize - this.yOffset));
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.sideCtx.clearRect(0, 0, this.sideCanvas.width, this.sideCanvas.height);
         this.paintFrozenCells();
         this.paintActiveCluster();
+        this.paintNextCluster();
         if (this.gameStatus === 'paused') {
             this.paintPause();
         } else if (this.gameStatus === 'end') {
@@ -32,8 +41,7 @@ class Painter {
         for (let i = 0; i < this.playfield.grid.length; i++) {
             for (let j = 0; j < this.playfield.grid[i].length; j++) {
                 if (this.playfield.grid[i][j]) {
-                    this.ctx.fillStyle = this.playfield.grid[i][j];
-                    this.ctx.fillRect(j * this.scaleX + 1, (i - this.yOffset) * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1);
+                    this.paintCell({ x: j, y: i - this.yOffset }, this.playfield.grid[i][j]);
                 }
             }
         }
@@ -41,17 +49,32 @@ class Painter {
 
     paintActiveCluster = () => {
         this.cluster.children.forEach(cell => {
-            this.ctx.fillStyle = cell.color;
-            this.ctx.fillRect(
-                (this.cluster.position.x + cell.relativePosition.x) * this.scaleX + 1,
-                (this.cluster.position.y + cell.relativePosition.y - this.yOffset) * this.scaleY + 1,
-                this.scaleX - 1,
-                this.scaleY - 1
-            );
+            this.paintCell({ x: this.cluster.position.x + cell.relativePosition.x, y: this.cluster.position.y + cell.relativePosition.y - this.yOffset }, this.cluster.color);
         });
     };
 
-    // paint a 'game over' banner
+    paintNextCluster = () => {
+        this.sideCtx.fillStyle = 'green';
+        this.nextCluster.rotations[0].forEach(val => {
+            this.sideCtx.fillRect(val.x * this.sideScaleX + 1, val.y * this.sideScaleY + 1, this.sideScaleX - 1, this.sideScaleY - 1);
+        });
+    };
+
+    paintCell = (position, color) => {
+        let gradient = this.ctx.createRadialGradient(
+            position.x * this.scaleX,
+            position.y * this.scaleY,
+            this.scaleX,
+            (position.x + 1) * this.scaleX,
+            (position.y + 1) * this.scaleY,
+            this.scaleX / 2
+        );
+        gradient.addColorStop(0, 'white');
+        gradient.addColorStop(1, color);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(position.x * this.scaleX + 1, position.y * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1);
+    };
+
     paintEndGame = () => {
         this.paintBanner('Game Over');
     };
@@ -65,7 +88,7 @@ class Painter {
         this.ctx.fillRect(0, this.canvas.height / 2 - 50, this.canvas.width, 75);
         this.ctx.fillStyle = 'green';
         this.ctx.textAlign = 'center';
-        this.ctx.font = '50px monospace';
+        this.ctx.font = '50px pixel';
         this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
     };
 

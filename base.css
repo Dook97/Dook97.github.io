@@ -122,3 +122,8 @@ input[type='range']::-moz-range-track {
     font-family: 'geo-regular';
     src: url(fonts/Geo-Regular.ttf);
 }
+
+@font-face {
+    font-family: 'pixel';
+    src: url(fonts/pixel.woff);
+}

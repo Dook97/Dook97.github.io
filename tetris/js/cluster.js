@@ -11,11 +11,11 @@ class Cluster {
     }
 
     freeze = () => {
-        this.children.forEach(child => this.playfield.reserveCell({ x: this.position.x + child.relativePosition.x, y: this.position.y + child.relativePosition.y }, child.color));
+        this.children.forEach(child => this.playfield.reserveCell({ x: this.position.x + child.relativePosition.x, y: this.position.y + child.relativePosition.y }, this.color));
     };
 
     getChildren = () => {
-        this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(this.color, position)));
+        this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(position)));
     };
 
     rotate = () => {

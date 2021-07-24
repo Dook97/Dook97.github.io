@@ -9,14 +9,16 @@ class Manager {
             time: document.querySelector('#time'),
             status: document.querySelector('#status'),
         };
-        this.canvas = document.querySelector('canvas');
+        this.canvas = document.querySelector('#main-canvas');
+        this.sideCanvas = document.querySelector('#side-canvas');
 
         this.playfield = new Playfield(xSize, ySize, yOffset);
-        this.painter = new Painter(this.playfield, yOffset, colors, this.canvas, this.statusElements);
+        this.painter = new Painter(this.playfield, yOffset, colors, this.canvas, this.sideCanvas, this.statusElements);
 
-        this.preparedCluster = this.prepareNewCluster(...this.getRandClusterArgs());
-        this.activeCluster = this.prepareNewCluster(...this.getRandClusterArgs());
-        this.painter.cluster = this.activeCluster;
+        this.nextCluster = this.prepareNewCluster(...this.getRandClusterArgs());
+        this.cluster = this.prepareNewCluster(...this.getRandClusterArgs());
+        this.painter.cluster = this.cluster;
+        this.painter.nextCluster = this.nextCluster;
 
         this.prevColor = 'none';
         this.tick = tick; // game step duration
@@ -34,7 +36,7 @@ class Manager {
             if (this.painter.gameStatus === 'running') {
                 this.time += this.tick;
                 this.turns++;
-                if (!this.activeCluster.move({ x: 0, y: 1 })) {
+                if (!this.cluster.move({ x: 0, y: 1 })) {
                     this.changeActiveCluster();
                     let deletedRowsCount = this.playfield.deleteFullRows();
                     this.rows += deletedRowsCount;
@@ -49,10 +51,11 @@ class Manager {
     };
 
     changeActiveCluster = () => {
-        this.activeCluster.freeze();
-        this.activeCluster = this.preparedCluster;
-        this.preparedCluster = this.prepareNewCluster(...this.getRandClusterArgs());
-        this.painter.cluster = this.activeCluster;
+        this.cluster.freeze();
+        this.cluster = this.nextCluster;
+        this.nextCluster = this.prepareNewCluster(...this.getRandClusterArgs());
+        this.painter.cluster = this.cluster;
+        this.painter.nextCluster = this.nextCluster;
     };
 
     // choose random type and color; color is guaranteed to be different from previous tetrominos color
@@ -75,10 +78,10 @@ class Manager {
     // set keypress events for game control
     setEvents = () => {
         document.addEventListener('keypress', e => {
-            if (e.key.toLowerCase() === 'w' && this.painter.gameStatus === 'running') this.activeCluster.rotate();
-            else if (e.key.toLowerCase() === 'a' && this.painter.gameStatus === 'running') this.activeCluster.move({ x: -1, y: 0 });
-            else if (e.key.toLowerCase() === 'd' && this.painter.gameStatus === 'running') this.activeCluster.move({ x: 1, y: 0 });
-            else if (e.key.toLowerCase() === 's' && this.painter.gameStatus === 'running') this.activeCluster.drop();
+            if (e.key.toLowerCase() === 'w' && this.painter.gameStatus === 'running') this.cluster.rotate();
+            else if (e.key.toLowerCase() === 'a' && this.painter.gameStatus === 'running') this.cluster.move({ x: -1, y: 0 });
+            else if (e.key.toLowerCase() === 'd' && this.painter.gameStatus === 'running') this.cluster.move({ x: 1, y: 0 });
+            else if (e.key.toLowerCase() === 's' && this.painter.gameStatus === 'running') this.cluster.drop();
             else if (e.key.toLowerCase() === 'r') this.restart();
             else if (e.key.toLowerCase() === 'p') {
                 if (this.painter.gameStatus === 'running') {

@@ -1,8 +1,7 @@
 'use strict';
 
 class Cell {
-    constructor(color, position) {
-        this.color = color;
+    constructor(position) {
         this.relativePosition = position; // relative to parent cluster top left corner (cluster.position)
     }
 

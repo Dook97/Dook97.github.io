@@ -31,7 +31,7 @@ h1 {
     margin: 0;
     padding: 5px 0px;
     color: green;
-    background-image: radial-gradient(circle 200px at center, rgb(0, 54, 0), black);
+    background-image: radial-gradient(circle 175px at center, rgb(0, 54, 0), black);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
@@ -91,4 +91,8 @@ table tr > td:last-child {
 
 span {
     color: green;
+}
+
+#side-canvas {
+    margin: 10px 0px;
 }

@@ -42,7 +42,8 @@
                 </article>
                 <div id="middle">
                     <h1>TETRIS</h1>
-                    <canvas width="400px" height="800px"></canvas>
+                    <!--keep width:height ratio 1:2-->
+                    <canvas id="main-canvas" width="350px" height="700px"></canvas>
                 </div>
                 <article class="help" id="right-panel">
                     <header><h2>game info</h2></header>
@@ -77,6 +78,8 @@
                     <section>
                         <h3>Next Tetromino</h3>
                         <hr />
+                        <!--keep the width:height ratio 4:3-->
+                        <div style="text-align: center"><canvas id="side-canvas" width="80px" height="60px"></canvas></div>
                     </section>
                 </article>
             </div>
