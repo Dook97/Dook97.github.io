@@ -83,20 +83,14 @@ class Manager {
             else if (e.key.toLowerCase() === 'd' && this.painter.gameStatus === 'running') this.cluster.move({ x: 1, y: 0 });
             else if (e.key.toLowerCase() === 's' && this.painter.gameStatus === 'running') this.cluster.drop();
             else if (e.key.toLowerCase() === 'r') this.restart();
-            else if (e.key.toLowerCase() === 'p') {
-                if (this.painter.gameStatus === 'running') {
-                    this.painter.gameStatus = 'paused';
-                } else if (this.painter.gameStatus === 'paused') {
-                    this.painter.gameStatus = 'running';
-                }
-            }
+            else if (e.key.toLowerCase() === 'p') this.painter.gameStatus = this.painter.gameStatus === 'running' ? 'paused' : 'running';
         });
     };
 
     restart = () => {
         this.painter.gameStatus = 'running';
         this.changeActiveCluster();
-        this.playfield.grid = this.playfield.makeEmptyGrid();
+        this.playfield.grid = this.playfield.getEmptyGrid();
         this.score = 0;
         this.turns = 0;
         this.rows = 0;

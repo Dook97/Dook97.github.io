@@ -27,9 +27,9 @@ class Painter {
     paint = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.sideCtx.clearRect(0, 0, this.sideCanvas.width, this.sideCanvas.height);
-        this.highlightActiveColumns();
+        this.paintClusterShadow();
+        this.paintCluster();
         this.paintFrozenCells();
-        this.paintActiveCluster();
         this.paintNextCluster();
         if (this.gameStatus === 'paused') {
             this.paintBanner('Paused');
@@ -49,9 +49,23 @@ class Painter {
         }
     };
 
-    paintActiveCluster = () => {
+    paintCluster = () => {
         this.cluster.children.forEach(cell => {
             this.paintCell({ x: this.cluster.position.x + cell.relativePosition.x, y: this.cluster.position.y + cell.relativePosition.y - this.yOffset }, this.cluster.color);
+        });
+    };
+
+    paintClusterShadow = () => {
+        let collisionDistance = this.playfield.getCollisionDistance(this.cluster);
+        this.cluster.children.forEach(cell => {
+            this.paintCell(
+                {
+                    x: this.cluster.position.x + cell.relativePosition.x,
+                    y: this.cluster.position.y + cell.relativePosition.y - this.yOffset + collisionDistance,
+                },
+                this.cluster.color,
+                true
+            );
         });
     };
 
@@ -61,25 +75,18 @@ class Painter {
         });
     };
 
-    paintCell = (position, color) => {
-        let gradient = this.ctx.createRadialGradient(
-            position.x * this.scaleX,
-            position.y * this.scaleY,
-            this.scaleX,
-            (position.x + 1) * this.scaleX,
-            (position.y + 1) * this.scaleY,
-            this.scaleX / 2
-        );
-        gradient.addColorStop(0, 'white');
-        gradient.addColorStop(1, color);
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(position.x * this.scaleX + 1, position.y * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1);
-    };
-
-    // highlits columns of the canvas in which there are cells of an active cluster
-    highlightActiveColumns = () => {
-        this.ctx.fillStyle = 'rgb(7, 7, 7)';
-        this.cluster.children.forEach(cell => this.ctx.fillRect((this.cluster.position.x + cell.relativePosition.x) * this.scaleX, 0, this.scaleX, this.canvas.height));
+    paintCell = (position, color, strokeMode = false) => {
+        let args = [position.x * this.scaleX + 1, position.y * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1];
+        if (strokeMode) {
+            this.ctx.strokeStyle = color;
+            this.ctx.strokeRect(...args);
+        } else {
+            let gradient = this.ctx.createRadialGradient(args[0], args[1], this.scaleX, args[0] + this.scaleX, args[1] + this.scaleY, this.scaleX / 2);
+            gradient.addColorStop(0, 'white');
+            gradient.addColorStop(1, color);
+            this.ctx.fillStyle = gradient;
+            this.ctx.fillRect(...args);
+        }
     };
 
     paintBanner = text => {

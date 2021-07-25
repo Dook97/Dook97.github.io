@@ -5,10 +5,10 @@ class Playfield {
         this.xSize = xSize; // grid width
         this.ySize = ySize + yOffset; // grid height - yOffset included
         this.yOffset = yOffset; // number of invisible rows used for spawning of new tetrominos
-        this.grid = this.makeEmptyGrid();
+        this.grid = this.getEmptyGrid();
     }
 
-    makeEmptyGrid = () => {
+    getEmptyGrid = () => {
         let grid = [];
         for (let i = 0; i < this.ySize; i++) {
             grid.push(new Array(this.xSize).fill(''));
@@ -37,5 +37,24 @@ class Playfield {
 
     reserveCell = (position, color) => {
         this.grid[position.y][position.x] = color;
+    };
+
+    // returns distance from active cluster to the nearest downward obstacle - used for painting tetromino shadow
+    getCollisionDistance = cluster => {
+        let minDistance = this.ySize;
+        let maxY = 0;
+        cluster.children.forEach(cell => {
+            let cellX = cluster.position.x + cell.relativePosition.x;
+            let cellY = cluster.position.y + cell.relativePosition.y;
+            this.grid.forEach((row, i) => {
+                if (i > cellY && i - (cellY + 1) < minDistance && row[cellX]) {
+                    minDistance = i - (cellY + 1);
+                }
+            });
+            if (cellY > maxY) {
+                maxY = cellY;
+            }
+        });
+        return minDistance !== this.ySize ? minDistance : this.ySize - 1 - maxY;
     };
 }
