@@ -56,7 +56,9 @@ class Painter {
     };
 
     paintNextCluster = () => {
-        this.nextCluster.rotations[0].forEach(val => this.sideCtx.fillRect(val.x * this.sideScaleX + 1, val.y * this.sideScaleY + 1, this.sideScaleX - 1, this.sideScaleY - 1));
+        this.nextCluster.childrenPositions.forEach(val =>
+            this.sideCtx.fillRect(val.x * this.sideScaleX + 1, val.y * this.sideScaleY + 1, this.sideScaleX - 1, this.sideScaleY - 1)
+        );
     };
 
     paintCell = (position, color, strokeMode = false) => {

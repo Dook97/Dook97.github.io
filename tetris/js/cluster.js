@@ -5,20 +5,15 @@ class Cluster {
         this.color = color; // tetromino color
         this.playfield = playfield;
         this.children = [];
-        this.rotationIndex = 0;
-        this.position = { x: 0, y: 0 }; // top left corner of the imaginary tetromino container
-        this.rotations; // array of all possible rotations - specified in descendant classes
     }
 
     freeze = () => this.children.forEach(cell => this.playfield.reserveCell(cell.getPosition(), this.color));
 
-    getChildren = () => this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(position, this)));
+    getChildren = () => this.childrenPositions.forEach(position => this.children.push(new Cell(position, this)));
 
     rotate = () => {
-        let newRotationIndex = (this.rotationIndex + 1) % this.rotations.length;
-        if (this.rotations[newRotationIndex].every(value => this.playfield.checkCellAvailability({ x: this.position.x + value.x, y: this.position.y + value.y }))) {
-            this.rotationIndex = newRotationIndex;
-            this.children.forEach((cell, i) => cell.moveTo(this.rotations[this.rotationIndex][i]));
+        if (this.children.every(child => this.playfield.checkCellAvailability({ x: this.position.x + this.edgeLength - 1 - child.relativePosition.y, y: this.position.y + child.relativePosition.x }))) {
+            this.children.forEach(child => child.moveTo({ x: this.edgeLength - 1 - child.relativePosition.y, y: child.relativePosition.x }));
         }
     };
 
@@ -39,29 +34,29 @@ class Cluster {
 class I extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [
-            [{x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}, {x : 3, y : 1}],
-            [{x : 2, y : 0}, {x : 2, y : 1}, {x : 2, y : 2}, {x : 2, y : 3}],
-            [{x : 0, y : 2}, {x : 1, y : 2}, {x : 2, y : 2}, {x : 3, y : 2}],
-            [{x : 1, y : 0}, {x : 1, y : 1}, {x : 1, y : 2}, {x : 1, y : 3}]
+        this.childrenPositions = [
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
+            { x: 2, y: 1 },
+            { x: 3, y: 1 },
         ];
-        this.getChildren();
         this.position = { x: 3, y: 1 };
+        this.edgeLength = 4;
+        this.getChildren();
     }
 }
 
 class J extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [
-            [{x : 1, y : 0}, {x : 1, y : 1}, {x : 0, y : 2}, {x : 1, y : 2}],
-            [{x : 0, y : 0}, {x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}],
-            [{x : 1, y : 0}, {x : 2, y : 0}, {x : 1, y : 1}, {x : 1, y : 2}],
-            [{x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}, {x : 2, y : 2}]
+        this.childrenPositions = [
+            { x: 1, y: 0 },
+            { x: 1, y: 1 },
+            { x: 0, y: 2 },
+            { x: 1, y: 2 },
         ];
         this.getChildren();
+        this.edgeLength = 3;
         this.position = { x: 4, y: 0 };
     }
 }
@@ -69,14 +64,14 @@ class J extends Cluster {
 class L extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [
-            [{x : 1, y : 0}, {x : 1, y : 1}, {x : 2, y : 2}, {x : 1, y : 2}],
-            [{x : 0, y : 2}, {x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}],
-            [{x : 1, y : 0}, {x : 0, y : 0}, {x : 1, y : 1}, {x : 1, y : 2}],
-            [{x : 0, y : 1}, {x : 1, y : 1}, {x : 2, y : 1}, {x : 2, y : 0}]
+        this.childrenPositions = [
+            { x: 1, y: 0 },
+            { x: 1, y: 1 },
+            { x: 2, y: 2 },
+            { x: 1, y: 2 },
         ];
         this.getChildren();
+        this.edgeLength = 3;
         this.position = { x: 3, y: 0 };
     }
 }
@@ -84,11 +79,14 @@ class L extends Cluster {
 class O extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [
-            [{x : 0, y : 0}, {x : 1, y : 0}, {x : 0, y : 1}, {x : 1, y : 1}]
+        this.childrenPositions = [
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
         ];
         this.getChildren();
+        this.edgeLength = 2;
         this.position = { x: 4, y: 1 };
     }
 }
@@ -96,14 +94,14 @@ class O extends Cluster {
 class S extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [
-            [{x: 1, y: 0}, {x: 2, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
-            [{x: 1, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 2, y: 2}],
-            [{x: 1, y: 1}, {x: 2, y: 1}, {x: 0, y: 2}, {x: 1, y: 2}],
-            [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}]
+        this.childrenPositions = [
+            { x: 1, y: 0 },
+            { x: 2, y: 0 },
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
         ];
         this.getChildren();
+        this.edgeLength = 3;
         this.position = { x: 4, y: 1 };
     }
 }
@@ -111,14 +109,14 @@ class S extends Cluster {
 class T extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [
-            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 2, y: 1}],
-            [{x: 1, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 1, y: 2}],
-            [{x: 0, y: 1}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 1, y: 2}],
-            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}]
+        this.childrenPositions = [
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
+            { x: 2, y: 1 },
         ];
         this.getChildren();
+        this.edgeLength = 3;
         this.position = { x: 4, y: 1 };
     }
 }
@@ -126,14 +124,14 @@ class T extends Cluster {
 class Z extends Cluster {
     constructor(color, playfield) {
         super(color, playfield);
-        // prettier-ignore
-        this.rotations = [           
-            [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}],
-            [{x: 2, y: 0}, {x: 1, y: 1}, {x: 2, y: 1}, {x: 1, y: 2}],
-            [{x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 2}, {x: 2, y: 2}],
-            [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}, {x: 0, y: 2}]
+        this.childrenPositions = [
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: 1, y: 1 },
+            { x: 2, y: 1 },
         ];
         this.getChildren();
+        this.edgeLength = 3;
         this.position = { x: 4, y: 1 };
     }
 }
