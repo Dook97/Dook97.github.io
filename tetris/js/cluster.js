@@ -10,26 +10,19 @@ class Cluster {
         this.rotations; // array of all possible rotations - specified in descendant classes
     }
 
-    freeze = () => {
-        this.children.forEach(child => this.playfield.reserveCell({ x: this.position.x + child.relativePosition.x, y: this.position.y + child.relativePosition.y }, this.color));
-    };
+    freeze = () => this.children.forEach(cell => this.playfield.reserveCell(cell.getPosition(), this.color));
 
-    getChildren = () => {
-        this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(position, this)));
-    };
+    getChildren = () => this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(position, this)));
 
     rotate = () => {
         let newRotationIndex = (this.rotationIndex + 1) % this.rotations.length;
         if (this.rotations[newRotationIndex].every(value => this.playfield.checkCellAvailability({ x: this.position.x + value.x, y: this.position.y + value.y }))) {
             this.rotationIndex = newRotationIndex;
-            this.children.forEach((child, i) => child.moveTo(this.rotations[this.rotationIndex][i]));
+            this.children.forEach((cell, i) => cell.moveTo(this.rotations[this.rotationIndex][i]));
         }
     };
 
-    checkMoveLegality = vector =>
-        this.children.every(child =>
-            this.playfield.checkCellAvailability({ x: this.position.x + child.relativePosition.x + vector.x, y: this.position.y + child.relativePosition.y + vector.y })
-        );
+    checkMoveLegality = vector => this.children.every(cell => this.playfield.checkCellAvailability({ x: cell.getPosition().x + vector.x, y: cell.getPosition().y + vector.y }));
 
     move = vector => {
         if (this.checkMoveLegality(vector)) {
@@ -40,9 +33,7 @@ class Cluster {
         return false;
     };
 
-    drop = () => {
-        while (this.move({ x: 0, y: 1 })) {}
-    };
+    drop = () => this.move({ x: 0, y: this.playfield.getCollisionDistance(this) });
 }
 
 class I extends Cluster {

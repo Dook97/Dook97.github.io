@@ -31,15 +31,13 @@ class Playfield {
 
     findFullRowsIndexes = () => {
         let out = [];
-        this.grid.forEach((_, i, arr) => out = arr[i].every(val => Boolean(val)) ? [...out, i] : out);
+        this.grid.forEach((_, i, arr) => (out = arr[i].every(val => Boolean(val)) ? [...out, i] : out));
         return out;
     };
 
-    reserveCell = (position, color) => {
-        this.grid[position.y][position.x] = color;
-    };
+    reserveCell = (position, color) => (this.grid[position.y][position.x] = color);
 
-    // returns distance from active cluster to the nearest downward obstacle - used for painting tetromino shadow
+    // returns distance from active cluster to the nearest downward obstacle
     getCollisionDistance = cluster => {
         let minDistance = this.ySize;
         let maxY = 0;
