@@ -1,3 +1,5 @@
+'use strict';
+
 window.addEventListener('load', () => {
     const tick = 1000; // game step duration
     const yOffset = 3; // number of top rows which won't be visible and are only used for spawning new tetrominos
