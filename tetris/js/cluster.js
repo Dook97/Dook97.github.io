@@ -15,7 +15,7 @@ class Cluster {
     };
 
     getChildren = () => {
-        this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(position)));
+        this.rotations[this.rotationIndex].forEach(position => this.children.push(new Cell(position, this)));
     };
 
     rotate = () => {

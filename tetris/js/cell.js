@@ -1,8 +1,9 @@
 'use strict';
 
 class Cell {
-    constructor(position) {
+    constructor(position, parent) {
         this.relativePosition = position; // relative to parent cluster top left corner (cluster.position)
+        this.parent = parent;
     }
 
     move = vector => {
@@ -13,4 +14,6 @@ class Cell {
     moveTo = point => {
         this.relativePosition = point;
     };
+
+    getPosition = () => ({ x: this.relativePosition.x + this.parent.position.x, y: this.relativePosition.y + this.parent.position.y });
 }

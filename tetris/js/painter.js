@@ -23,7 +23,6 @@ class Painter {
         this.gameStatus = 'running'; // options: running, paused, end
     }
 
-    // main graphics method
     paint = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.sideCtx.clearRect(0, 0, this.sideCanvas.width, this.sideCanvas.height);
@@ -43,40 +42,25 @@ class Painter {
         for (let i = 0; i < this.playfield.grid.length; i++) {
             for (let j = 0; j < this.playfield.grid[i].length; j++) {
                 if (this.playfield.grid[i][j]) {
-                    this.paintCell({ x: j, y: i - this.yOffset }, this.playfield.grid[i][j]);
+                    this.paintCell({ x: j, y: i }, this.playfield.grid[i][j]);
                 }
             }
         }
     };
 
-    paintCluster = () => {
-        this.cluster.children.forEach(cell => {
-            this.paintCell({ x: this.cluster.position.x + cell.relativePosition.x, y: this.cluster.position.y + cell.relativePosition.y - this.yOffset }, this.cluster.color);
-        });
-    };
+    paintCluster = () => this.cluster.children.forEach(cell => this.paintCell(cell.getPosition(), this.cluster.color));
 
     paintClusterShadow = () => {
         let collisionDistance = this.playfield.getCollisionDistance(this.cluster);
-        this.cluster.children.forEach(cell => {
-            this.paintCell(
-                {
-                    x: this.cluster.position.x + cell.relativePosition.x,
-                    y: this.cluster.position.y + cell.relativePosition.y - this.yOffset + collisionDistance,
-                },
-                this.cluster.color,
-                true
-            );
-        });
+        this.cluster.children.forEach(cell => this.paintCell({ x: cell.getPosition().x, y: cell.getPosition().y + collisionDistance }, this.cluster.color, true));
     };
 
     paintNextCluster = () => {
-        this.nextCluster.rotations[0].forEach(val => {
-            this.sideCtx.fillRect(val.x * this.sideScaleX + 1, val.y * this.sideScaleY + 1, this.sideScaleX - 1, this.sideScaleY - 1);
-        });
+        this.nextCluster.rotations[0].forEach(val => this.sideCtx.fillRect(val.x * this.sideScaleX + 1, val.y * this.sideScaleY + 1, this.sideScaleX - 1, this.sideScaleY - 1));
     };
 
     paintCell = (position, color, strokeMode = false) => {
-        let args = [position.x * this.scaleX + 1, position.y * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1];
+        let args = [position.x * this.scaleX + 1, (position.y - this.yOffset) * this.scaleY + 1, this.scaleX - 1, this.scaleY - 1];
         if (strokeMode) {
             this.ctx.strokeStyle = color;
             this.ctx.strokeRect(...args);

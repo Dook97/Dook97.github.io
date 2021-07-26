@@ -29,7 +29,6 @@ class Manager {
         this.setEvents();
     }
 
-    // game loop
     loop = () => {
         this.painter.fillPageStats(this.score, this.turns, this.rows, this.time);
         setTimeout(() => {
@@ -58,7 +57,6 @@ class Manager {
         this.painter.nextCluster = this.nextCluster;
     };
 
-    // choose random type and color; color is guaranteed to be different from previous tetrominos color
     getRandClusterArgs = () => [
         ['I', 'J', 'L', 'O', 'S', 'T', 'Z'][Math.floor(Math.random() * 7)],
         this.painter.colors.filter(color => color !== this.prevColor)[Math.floor(Math.random() * (this.painter.colors.length - 1))],
