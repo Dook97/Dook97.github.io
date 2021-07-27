@@ -40,19 +40,18 @@ class Playfield {
     // returns distance from active cluster to the nearest downward obstacle
     getCollisionDistance = cluster => {
         let minDistance = this.ySize;
-        let maxY = 0;
         cluster.children.forEach(cell => {
-            let cellX = cluster.position.x + cell.relativePosition.x;
-            let cellY = cluster.position.y + cell.relativePosition.y;
+            let pos = cell.getPosition();
             this.grid.forEach((row, i) => {
-                if (i > cellY && i - (cellY + 1) < minDistance && row[cellX]) {
-                    minDistance = i - (cellY + 1);
+                if (i > pos.y && i - (pos.y + 1) < minDistance) {
+                    if (row[pos.x]) {
+                        minDistance = i - (pos.y + 1);
+                    } else if (i + 1 === this.ySize) {
+                        minDistance = i - pos.y;
+                    }
                 }
             });
-            if (cellY > maxY) {
-                maxY = cellY;
-            }
         });
-        return minDistance !== this.ySize ? minDistance : this.ySize - 1 - maxY;
+        return minDistance;
     };
 }
