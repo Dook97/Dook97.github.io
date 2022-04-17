@@ -4,6 +4,8 @@
 }
 
 body {
+	background-color: #000;
+
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
@@ -11,18 +13,55 @@ body {
 	line-height: 1.1;
 	font-family: Cardo, P052, serif;
 	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
-	color: white;
+	color: #FFF;
 
+	margin: 0;
+	padding: 0;
+}
+
+#wrapper {
 	max-width: 90vw;
 	margin-left: 20%;
 	margin-right: 20%;
-	margin-top: 30px;
+	margin-top: 0;
+	margin-bottom: 8em;
 }
 
 h1 {
 	color: #017A1D;
 	text-align: center;
 	font-variant: small-caps;
+	font-size: 2.5em;
+	margin: 0.5em;
+}
+
+h2 {
+	color: #5B53B2;
+	font-variant: small-caps;
+}
+
+h3 {
+	color: #CA7224;
+	font-size: 1em;
+	font-variant: small-caps;
+}
+
+h2, h3 {
+	margin-bottom: 0.25em;
+	margin-top: 0.25em;
+}
+
+a {
+	color: #FF99FF;
+	text-decoration: None;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+article > section {
+	padding-left: 1.5em;
 }
 
 #menubar {
@@ -43,15 +82,15 @@ nav a {
 }
 
 #menubar div {
-	background: black;
-	border-left: white solid 2px;
+	background: #000;
+	border-left: #FFF solid 2px;
 	padding: 5px;
 	margin: 7px;
 	font-variant: small-caps;
 }
 
 main {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.70);
 	padding: 2%;
 }
 
