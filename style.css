@@ -1,0 +1,61 @@
+@font-face {
+	font-family: "Cardo";
+	src: url("fonts/Cardo104s.ttf");
+}
+
+body {
+	background-image: url("./img/bg.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+
+	line-height: 1.1;
+	font-family: Cardo, P052, serif;
+	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+	color: white;
+
+	max-width: 90vw;
+	margin-left: 20%;
+	margin-right: 20%;
+	margin-top: 30px;
+}
+
+h1 {
+	color: #017A1D;
+	text-align: center;
+	font-variant: small-caps;
+}
+
+#menubar {
+	display: flex;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+}
+
+nav {
+	font-size: larger;
+	text-align: center;
+}
+
+nav a {
+	text-decoration: none;
+	color: inherit;
+}
+
+#menubar div {
+	background: black;
+	border-left: white solid 2px;
+	padding: 5px;
+	margin: 7px;
+	font-variant: small-caps;
+}
+
+main {
+	background-color: rgba(0, 0, 0, 0.5);
+	padding: 2%;
+}
+
+#active {
+	border-color: #BB8A4F !important;
+}
