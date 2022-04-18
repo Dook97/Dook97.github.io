@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Poznámky k Vimu</title>
+<style>
+body {
+	background-color: #000;
+	color: grey;
+	padding: 0;
+	margin: 0;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+textarea {
+	background-color: inherit;
+	color: inherit;
+	border: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	resize: none;
+}
+</style>
+</head>
+<body>
+<textarea readonly spellcheck="false">
+# poznámky k vimu
+
+tohle je Dookův spis poznámek k vimu
+převážně to píšu pro sebe, abych si všechno líp zafixoval a měl případnou
+reference, ale je možné, že to někdy zveřejním. každopádně nenesu žádnou
+zodpovědnost za vzniklé škody, traumata způsobená špatným formátováním
+markdownu a blablabla
+
+pozn: je dobrý nápad na systémové úrovni přebindovat Caps na Esc, protože
+caps je k ničemu, ale na užitečném místě a esc budeš hodně používat
+
+pozn2: nauč se regexy - bez nich jsi s vimem na 1/100 potenciálu :)
+
+pozn3: zápis `<C-[ZNAK]>` se standardně používá k vyjádření Ctrl+Znak. Snažím
+se to tady používat, protože kdykoliv budeš cokoliv hledat na netu, tak lidi
+in-the-know budou odpovídat s tímhle formátem
+
+## módy
+
+vim je modální editor - tj má módy, a každý z nich slouží k něčemu jinému
+
+normal mode slouží k zadávání příkazů, které pracují na textu - v normal mode
+se vim otevře by default
+insert mode k běžnému psaní a editaci
+visual mode k vizuálnímu výběru textu nad kterým jde potom provádět příkazy
+command mode slouží k zadávání příkazů
+
+jsou i další, ale tyhle jsou nejdůležitější
+
+většina příkazů jde spustit s různými argumenty a modifikátory
+třeba příkaz dd smaže aktuální řádku, když místo toho ale napíšeme 5dd
+smažeme řádek rovnou 5
+síla vimu je právě v tomhle kombinování příkazů, modifikátorů a tak
+
+## customizace
+
+pokud ti ve vimu bude něco chybět, můžeš si to sám nakonfigurovat
+v závislosti na tom, jakou odrůdu vimu používáš (a na jaké platformě; já
+používám neovim na linuxu) se bude lišit umístění a jméno config souboru
+
+vlastní klavesové zkratky, příkazy, kosmetické úpravy - nic není problém :)
+
+krom toho existuje spousta optionů, které má vim zabudované a jdou aktivovat v configu
+doporučuju pročíst si dokumentaci (příkaz :help)
+
+existují také pluginy, ale do těch bych se být tebou alespoň ze začátku nepouštěl
+nejdřív se nauč používat vim v základu (a zjistíš, že je toho hodně, co se
+můžeš učit) a třeba časem shledáš, že většinu pluginů vůbec nepotřebuješ
+navíc pluginy dělají tenhle lightweight editor not-so-lightweight -
+viděl jsem configy, kde se lidi snažili napodobit vs-code (proč??) s veškerým bloatem a
+spouštělo se to na mém ntb několik málo sekund oproti basic vimu, který je
+instantní
+
+## základní editace
+
+i - insert mode; kurzor nalevo
+I - insert mode; skočí na začátek řádky
+a - insert mode; kurzor napravo
+A - insert mode; skočí na konec řádky
+s - smaže písmeno a přejde do insert mode
+S - smaže celou řádku a přejde do insert mode
+c (objekt) - smaže objekt a přejde do insert mode
+C - smaže všechno od kurzoru včetně do konce řádky a přejde do insert mode
+  - cc udělá to samé jako S
+d (objekt) - smaže objekt
+           - smaže celou řádku
+D - smaže řádku od kurzoru včetně dál
+p - pastne to, co je v bufferu
+P - pastne před kurzor
+gp - pastne a nechá kurzor na konci vloženého textu
+
+u - undo
+<C-r> - redo
+
+. - zopakuje poslední sérii příkazů (to je asi nejlepší si vyzkoušet, než abych
+to vysvětloval)
+
+## pohyb
+
+h,j,k,l - nalevo, dolů, nahoru, doprava
+
+gj/gk - posune kurzor *vizuálně* o jednu řádku dolů/nahoru - tj pokud máš jednu
+logickou řádku, která je roztáhlá přes několik vizuálních, tak vim neskočí na
+další logickou ale vizuální řádku. taky funguje g$/g0 pro skok na konec/začátek
+vizuální řádky
+
+G[číslo] - skočí na n-tou řádku
+:[číslo] - to samé
+
+% - skočí na druhou závorku z páru, pokud je kurzor na první
+( - skočí na začátek odstavce
+) - za odstavec
+{ - skoří před odstavec
+} - za odstavec
+f [znak] - skočí na nejbližší výskyt znaku v řádku
+t [znak] - to samé, ale skočí těsně před ten znak
+ge - pozpátku na konec slova
+
+H - přesune kurzor na první řádku viditelnou ve viewportu
+M - to samé doprostřed
+L - to samé dolů
+
+Ctrl-E - posun o řádku dolů
+Ctrl-Y - posun o řádku nahoru
+Ctrl-U - posune viewport o polovinu dolů
+Ctrl-D - nahoru
+
+zz - posune viewport tak, že aktuální řádka je uprostřed
+zt - to samé nahoře (top)
+tb - to samé dole (bottom)
+
+### programátor specific
+
+gd - skočí na deklaraci
+
+## pokročilejší editace
+
+gqq - rozděl dlouhou řádku na vícero maneších řádek
+J - spojí řádku s řádkou pod ní s mezerou mezi nimi
+gJ - varianta předchozího bez mezery
+g& - provede poslední použitou substituci na celém dokumentu
+
+g/pattern/command - provede příkaz pro všechny matchnuté řádky
+třeba se hodí: `g/^$/d` pro smazání prázdných řádků
+
+:%s/[pattern]/[replacement]/(g) - globální replace
+bez procenta funguje jen na současné řádce
+když vynacháme pattern, nahradí poslední vyhledávání
+to se hodí zkombinovat s \* která vyhledá všechny výskyty slova pod kurzorem
+
+### kapitalizace
+
+gu[objekt] - převede objekt na lowercase
+gU[objekt] - převede objekt na uppercase
+guu/gUU funguje na celou řádku
+~ - změní kapitalizaci na opačnou
+
+## visual mode
+
+v - přepne do visual mode, kdy můžeš vybrat text a pak na něm provést nějaký příkaz
+<Shift-v> - vybírá po celých řádcích
+gv - znovu-vybere poslední výběr ve visual mode
+o - přesune kurzor na konec výběru, takže ho můžeš rozšiřovat opačným směrem
+O - to samé na začátek
+
+<Ctrl-c> - blokový výběr
+s tím souvisí \<Shift-i\>, který umožňuje něco napsat na všechny vybrané řádky
+najednou a podobně funguje <Shift-a>
+
+## vyhledávání
+
+/ - normální vyhledávání
+? - vyhledávání směrem nahoru
+n - skočí na další match
+* - vyhledá to, co je právě pod kurzorem
+:noh - schová highlighting
+
+## práce se soubory
+
+ZZ - ulož a zavři vim
+ZQ - zavři vim (bez ukládání)
+gf - pokud je pod kurzorem cesta k souboru, skočí na ten soubor
+:Ex - otevře vestavěný vim file manager
+:e [cesta] - otevře soubor
+
+## meta
+
+:help (whatever) - zkusí otevřít vim help page pro whatever
+existuje ještě modifikátor kontextu - třeba když budu chtít hledat help pro
+nějaký příkaz ve visual mode, použiji :help `v_(whatever)`
+prázdný kontext je kontext pro normal mode
+
+ctrl-] - skočí na tag pod kurzorem nebo pokud pod kurzorem není tag, se pokusí nalézt help
+ctrl-O - skočí zpátky kde jsi byl před Ctrl-]
+K - otevře man page ohledně slova pod kurzorem
+
+## advanced
+
+q(písmeno) začne nahrávat makro, které uloží pod identifikátorem (písmeno)
+opětovné zmáčknutí q ukončí nahrávání
+makra jsou super useful na komplexnější operace a taky jsou důvod, proč bys
+neměl v configu měnit interní vimovský clipboard za systémový (ano jde to),
+protože pak jsou o hodně pomalejší a rozbíjejí se, když potřebuješ třeba z
+každé řádky něco cutnout a něco tam pastenout
+makro spustíš jednou pomocí `@(písmeno)` a n-krát pomocí `n@(písmeno)`
+
+:r ![příkaz] (argumenty) - vloží výstup programu do souboru
+třeba když tu teď použiju `ls -la`:
+
+```
+total 564
+drwxrwxrwx 1 root root   4096 10. dub 16.21 .
+drwxrwxrwx 1 root root   4096  3. led 00.48 ..
+-rwxrwxrwx 1 root root 562765  3. říj  2021 potvrz_stud.pdf
+-rwxrwxrwx 1 root root   2221 10. dub 16.21 vim-notes.md
+```
+
+když máme kurzor na řádce, kde je napsaný příkaz, můžeme použít !!sh k jeho
+spuštění a nahrazení řádky výstupem toho programu
+obecně výstup jakéhokoliv programu můžeme dostat `!!program`
+třeba když to použijeme `!!date` tak pastne do dokumentu současné datum
+
+## Objekty
+
+objekty jde používat spolu s příkazy
+třeba `d2w` smaže dvě slova
+tohle je hrozně mocný nástroj, když se to naučíš používat
+
+l - letter
+w - word
+t - tag (jakože HTML tag)
+b - begining (of a word)
+e - end (of a word)
+s - sentence
+p - paragraph
+
+také existují modifikátory, které to dělají ještě lepší:
+
+i - inside
+a - around
+
+příklad vydá za tisíc slov: `cip` -> change inside paragraph
+smaže odstavec a přepne do insert mode
+`di)` -> delete inside parens
+smaže obsah mezi závorkami; s modifikátorem a by ho smazal včetně závorek
+`vas` -> ve visual mode vybere větu a whitespace, který jí delimituje
+a tak dál
+
+## tipy & triky
+
+pokud budeš ve vimu psát kód zapiš si do configu:
+
+```
+syntax enable
+set smartindent
+set autoindent
+set number
+set rnu
+```
+
+všechny optiony jsou snad samovysvětlující, jen poslední je trochu kryptický -
+ten zapne relativní číslování řádek takže bude vim číslovat řádky nahoru a dolů
+podle vzdálenosti od kurzoru, což se sakra hodí v příkazech - představ si
+třeba, že chceš smazat nějaké řádky; chtěl bys napsat (číslo)dd, ale těch řádků
+je celkem hodně, tak to číslo hned nevykoukáš; s relativními čísly je to ale
+pohoda - navíc je to poznávací znamení og vim chads
+vlastně poslední option by sis měl nastavit bez ohledu na to, jestli budeš ve vimu psát kód
+
+xp - prohodí dva znaky -> první smaže a pak ho pastne za ten druhý
+</textarea>
+</body>
+</html>
