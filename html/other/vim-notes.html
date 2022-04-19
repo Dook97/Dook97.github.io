@@ -2,33 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Poznámky k Vimu</title>
-<style>
-body {
-	background-color: #000;
-	color: grey;
-	padding: 0;
-	margin: 0;
-}
-html, body {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
-textarea {
-	background-color: inherit;
-	color: inherit;
-	border: none;
-	padding: 0;
-	margin: 0;
-	width: 100%;
-	height: 100%;
-	resize: none;
-}
-</style>
+<link rel="stylesheet" href="/styles/plaintext.css">
+<title>vim-notes.txt</title>
 </head>
 <body>
-<textarea readonly spellcheck="false">
+<textarea readonly="true" spellcheck="false">
 # poznámky k vimu
 
 tohle je Dookův spis poznámek k vimu
@@ -170,14 +148,14 @@ guu/gUU funguje na celou řádku
 ## visual mode
 
 v - přepne do visual mode, kdy můžeš vybrat text a pak na něm provést nějaký příkaz
-<Shift-v> - vybírá po celých řádcích
+V - vybírá po celých řádcích
 gv - znovu-vybere poslední výběr ve visual mode
 o - přesune kurzor na konec výběru, takže ho můžeš rozšiřovat opačným směrem
 O - to samé na začátek
 
 <Ctrl-c> - blokový výběr
-s tím souvisí \<Shift-i\>, který umožňuje něco napsat na všechny vybrané řádky
-najednou a podobně funguje <Shift-a>
+s tím souvisí I, které umožňuje něco napsat na všechny vybrané řádky
+najednou a podobně funguje A
 
 ## vyhledávání
 
