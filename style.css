@@ -9,6 +9,7 @@ body {
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
+	background-position: left center;
 
 	line-height: 1.1;
 	font-family: Cardo, P052, serif;
@@ -81,12 +82,17 @@ nav a {
 	color: inherit;
 }
 
-#menubar div {
+#menubar > div {
 	background: #000;
 	border-left: #FFF solid 2px;
-	padding: 5px;
-	margin: 7px;
+	margin-left:   0.25em;
+	margin-right:  0.25em;
+	margin-bottom: 0.3em;
 	font-variant: small-caps;
+}
+
+.nav-wrapper {
+	padding: 0.25em;
 }
 
 main {
