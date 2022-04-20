@@ -41,24 +41,16 @@ třeba příkaz dd smaže aktuální řádku, když místo toho ale napíšeme 5
 smažeme řádek rovnou 5
 síla vimu je právě v tomhle kombinování příkazů, modifikátorů a tak
 
-## customizace
+## první spuštění
 
-pokud ti ve vimu bude něco chybět, můžeš si to sám nakonfigurovat
-v závislosti na tom, jakou odrůdu vimu používáš (a na jaké platformě; já
-používám neovim na linuxu) se bude lišit umístění a jméno config souboru
+vim je v normal mode - z něj můžeš zadávat příkazy a přecházet do jiných módů
 
-vlastní klavesové zkratky, příkazy, kosmetické úpravy - nic není problém :)
+vim zavřeš příkazem :wq (uloží změny) nebo :q! (zahodí změny)
 
-krom toho existuje spousta optionů, které má vim zabudované a jdou aktivovat v configu
-doporučuju pročíst si dokumentaci (příkaz :help)
+stiskem i přejdeš do insert mode, kde můžeš psát a zpátky do normal mode se
+dostaneš stiskem Esc
 
-existují také pluginy, ale do těch bych se být tebou alespoň ze začátku nepouštěl
-nejdřív se nauč používat vim v základu (a zjistíš, že je toho hodně, co se
-můžeš učit) a třeba časem shledáš, že většinu pluginů vůbec nepotřebuješ
-navíc pluginy dělají tenhle lightweight editor not-so-lightweight -
-viděl jsem configy, kde se lidi snažili napodobit vs-code (proč??) s veškerým bloatem a
-spouštělo se to na mém ntb několik málo sekund oproti basic vimu, který je
-instantní
+v normal mode můžeš pohybovat kurzorem pomocí h,j,k,l - left,down,up,right
 
 ## základní editace
 
@@ -66,112 +58,125 @@ i - insert mode; kurzor nalevo
 I - insert mode; skočí na začátek řádky
 a - insert mode; kurzor napravo
 A - insert mode; skočí na konec řádky
+x - smaže písmeno pod kurzorem
+X - smaže písmeno vlevo od kurzoru
 s - smaže písmeno a přejde do insert mode
-S - smaže celou řádku a přejde do insert mode
-c (objekt) - smaže objekt a přejde do insert mode
+S - smaže řádku (nechá new line) a přejde do insert mode
+c[objekt] - smaže objekt a přejde do insert mode
 C - smaže všechno od kurzoru včetně do konce řádky a přejde do insert mode
   - cc udělá to samé jako S
-d (objekt) - smaže objekt
-           - smaže celou řádku
+d[objekt] - smaže objekt
+          - dd smaže celou řádku včetně new line
 D - smaže řádku od kurzoru včetně dál
-p - pastne to, co je v bufferu
+y[objekt] - zkopíruje objekt
+          - yy zkopíruje celou řádku včetně new line
+p - pastne to, co je v clipboard registru
 P - pastne před kurzor
 gp - pastne a nechá kurzor na konci vloženého textu
+
+tady by bylo dobré zmínit, že kdykoliv ve vimu něco smažeš/zkopíruješ, uloží se
+to do registru ", ze kterého potom pastí příkaz p a podobné takže speciálně vim
+nepoužívá systémový clipboard (má to dobré opodstatnění)
 
 u - undo
 <C-r> - redo
 
-. - zopakuje poslední sérii příkazů (to je asi nejlepší si vyzkoušet, než abych
-to vysvětloval)
+. - zopakuje příkaz, který změnil podobu textu
+  - třeba pokud poslední takový příkaz byl i a v insert mode jsi potom napsal
+	"hello", tak při stisknutí . to bude jako bys na tom místě udělal znovu
+	to samé
 
 ## pohyb
 
 h,j,k,l - nalevo, dolů, nahoru, doprava
+
+[číslo]G - skočí na n-tou řádku
+:[číslo] - to samé
+
+0 - skočí na začátek řádky
+$ - na konec
+^ - na první non-whitespace znak na řádce
+e - na konec slova
+b - začátek slova
+w - začátek dalšího slova
+f[znak] - na nejbližší dopředný výskyt znaku v řádku
+t[znak] - to samé, ale těsně před ten znak
+F / T[znak] - analogické k small-caps variantě, ale dozadu
+ge - na konec předchozího slova
+% - na druhou závorku z páru, pokud je kurzor na první
+  - také funguje s HTML tagy
+( - na začátek odstavce
+) - za odstavec
+{ - před odstavec
+} - za odstavec
+
+<C-e> - posun viewportu o řádku dolů
+<C-y> - o řádku nahoru
+<C-u> - o polovinu viewportu dolů
+<C-d> - nahoru
 
 gj/gk - posune kurzor *vizuálně* o jednu řádku dolů/nahoru - tj pokud máš jednu
 logickou řádku, která je roztáhlá přes několik vizuálních, tak vim neskočí na
 další logickou ale vizuální řádku. taky funguje g$/g0 pro skok na konec/začátek
 vizuální řádky
 
-G[číslo] - skočí na n-tou řádku
-:[číslo] - to samé
-
-% - skočí na druhou závorku z páru, pokud je kurzor na první
-  - také funguje s HTML tagy
-( - skočí na začátek odstavce
-) - za odstavec
-{ - skoří před odstavec
-} - za odstavec
-f [znak] - skočí na nejbližší výskyt znaku v řádku
-t [znak] - to samé, ale skočí těsně před ten znak
-ge - pozpátku na konec slova
-
 H - přesune kurzor na první řádku viditelnou ve viewportu
 M - to samé doprostřed
 L - to samé dolů
 
-Ctrl-E - posun o řádku dolů
-Ctrl-Y - posun o řádku nahoru
-Ctrl-U - posune viewport o polovinu dolů
-Ctrl-D - nahoru
-
 zz - posune viewport tak, že aktuální řádka je uprostřed
 zt - to samé nahoře (top)
-tb - to samé dole (bottom)
+zb - to samé dole (bottom)
 
-### programátor specific
+gd - skočí na deklaraci (funkce, proměnné)
 
-gd - skočí na deklaraci
+## Objekty
+
+objekty jde používat spolu s příkazy
+třeba `d2w` smaže dvě slova
+tohle je hrozně mocný nástroj, když se to naučíš používat
+
+l - letter
+w - word
+s - sentence
+p - paragraph
+t - HTML tag
+
+také existují modifikátory, které to dělají ještě lepší:
+
+i - inside
+a - around
+
+příklad vydá za tisíc slov: `cip` -> change inside paragraph
+smaže odstavec a přepne do insert mode
+`di)` -> delete inside parens
+smaže obsah mezi závorkami; s modifikátorem a by ho smazal včetně závorek
+`vas` -> ve visual mode vybere větu a whitespace, který jí delimituje
+a tak dál
 
 ## pokročilejší editace
 
-gqq - rozděl dlouhou řádku na vícero maneších řádek
-J - spojí řádku s řádkou pod ní s mezerou mezi nimi
+gqq - rozděl dlouhou řádku na vícero menších řádek
+J - spojí řádku s řádkou pod ní a vloží mezi ně mezeru
 gJ - varianta předchozího bez mezery
-g& - provede poslední použitou substituci na celém dokumentu
-
-g/pattern/command - provede příkaz pro všechny matchnuté řádky
-třeba se hodí: `g/^$/d` pro smazání prázdných řádků
 
 :%s/[pattern]/[replacement]/(g) - globální replace
 bez procenta funguje jen na současné řádce
 když vynacháme pattern, nahradí poslední vyhledávání
 to se hodí zkombinovat s \* která vyhledá všechny výskyty slova pod kurzorem
 
+g/pattern/command - provede příkaz pro všechny matchnuté řádky
+třeba se hodí: `g/^$/d` pro smazání prázdných řádků
+
+g& - provede poslední použitou substituci na celém dokumentu
+   - substituci kterou jsem aplikoval na jedné řádce můžu aplikovat na celý dokument
+
 ### kapitalizace
 
 gu[objekt] - převede objekt na lowercase
 gU[objekt] - převede objekt na uppercase
 guu/gUU funguje na celou řádku
-~ - změní kapitalizaci na opačnou
-
-## visual mode
-
-v - přepne do visual mode, kdy můžeš vybrat text a pak na něm provést nějaký příkaz
-V - vybírá po celých řádcích
-gv - znovu-vybere poslední výběr ve visual mode
-o - přesune kurzor na konec výběru, takže ho můžeš rozšiřovat opačným směrem
-O - to samé na začátek
-
-<Ctrl-c> - blokový výběr
-s tím souvisí I, které umožňuje něco napsat na všechny vybrané řádky
-najednou a podobně funguje A
-
-## vyhledávání
-
-/ - normální vyhledávání
-? - vyhledávání směrem nahoru
-n - skočí na další match
-* - vyhledá to, co je právě pod kurzorem
-:noh - schová highlighting
-
-## práce se soubory
-
-ZZ - ulož a zavři vim
-ZQ - zavři vim (bez ukládání)
-gf - pokud je pod kurzorem cesta k souboru, skočí na ten soubor
-:Ex - otevře vestavěný vim file manager
-:e [cesta] - otevře soubor
+~ - změní kapitalizaci znaku na opačnou
 
 ## meta
 
@@ -180,9 +185,51 @@ existuje ještě modifikátor kontextu - třeba když budu chtít hledat help pr
 nějaký příkaz ve visual mode, použiji :help `v_(whatever)`
 prázdný kontext je kontext pro normal mode
 
-ctrl-] - skočí na tag pod kurzorem nebo pokud pod kurzorem není tag, se pokusí nalézt help
-ctrl-O - skočí zpátky kde jsi byl před Ctrl-]
-K - otevře man page ohledně slova pod kurzorem
+<C-o> - vrátí kurzor na místo, kde byl v předchozím kroku
+      - třeba i když v okně otevřeš nový soubor, tak <C-o> skočí zpátky na ten starý
+	  - hodí se při pročítání dokumentace, když člověk potřebuje skočit zpátky z linku
+K - otevře help page ohledně slova pod kurzorem
+
+## buffery
+
+// TODO
+
+## okna
+
+Okno je náhled do bufferu. Buffer nemusí mít přidělené okno (nemusí být vidět)
+a zavření okna nemusí znamenat zavření bufferu.
+
+Vim umí pracovat s více okny v jednom viewportu, což je velmi šikovné.
+
+<C-w>s rozdělí aktuální okno horizontálně na dvě
+<C-w>v vertikálně
+v obou případech bude v novém okně otevřený ten samý buffer, jako ze kterého se
+okno vydělilo - pokud bychom chtěli spíš otevřít nové prázdné okno, tak můžeme
+použít <C-w>n, což ale funguje jen pro horizontální okno, pro vertikální je
+zvlášť příkaz `:vnew`. Osobně bych doporučil překrýt si v configu ty defaultní
+zkratky vlastníma, které otevřou prázdné okno.
+
+<C-w>o zavře všechna okna krom aktuálního
+
+<C-w>r zrotuje okna doprava/dolů
+<C-w>R doleva/nahoru
+
+<C-w>K/J/H/L přesune okno úplně nahoru/dolů/doleva/doprava a roztáhne ho přes
+celou šířku/výšku
+<C-w>T přesune okno do nového tabu
+
+<C-w>= pokusí se udělat všechna okna stejně velká
+<C-w>+/-/>/< - zvětší/zmenší výšku/šířku okna
+
+## taby
+
+Tab je sdružení oken. V zásadě fungují dost podobně, jako v jakémkoliv jiném editoru.
+
+Tab můžeš otevřít příkazem `:tabe` a procházet mezi taby lze skrz gt/gT, kde
+samozřejmě funguje třeba 5gt pro skok na pátý tab.
+
+Tab se automaticky zavře, pokud v něm nejsou žádná okna - tabe vytvoří nové
+okno s prázdným bufferem.
 
 ## advanced
 
@@ -210,31 +257,14 @@ spuštění a nahrazení řádky výstupem toho programu
 obecně výstup jakéhokoliv programu můžeme dostat `!!program`
 třeba když to použijeme `!!date` tak pastne do dokumentu současné datum
 
-## Objekty
-
-objekty jde používat spolu s příkazy
-třeba `d2w` smaže dvě slova
-tohle je hrozně mocný nástroj, když se to naučíš používat
-
-l - letter
-w - word
-t - tag (jakože HTML tag)
-b - begining (of a word)
-e - end (of a word)
-s - sentence
-p - paragraph
-
-také existují modifikátory, které to dělají ještě lepší:
-
-i - inside
-a - around
-
-příklad vydá za tisíc slov: `cip` -> change inside paragraph
-smaže odstavec a přepne do insert mode
-`di)` -> delete inside parens
-smaže obsah mezi závorkami; s modifikátorem a by ho smazal včetně závorek
-`vas` -> ve visual mode vybere větu a whitespace, který jí delimituje
-a tak dál
+:terminal spustí zabudovaný vimovský terminál
+to je super užitečné, když si otevřeš vícero oken a v jednom z nich terminál
+nejdřív jsi v "normal mode", což znamená, že můžeš pohybovat kurzorem všude,
+kde chceš, když pak stiskneš i, dostaneš se do zadávacího mode, kdy můžeš
+používat terminál as usual
+opuštění terminálu má nějakou šílenou zkratku, která navíc bývá jiná pro různé
+odrůdy vimu - v neovimu to je myslím <C-\><C-N> - najdi si ji, pomocí
+`:help terminal` a přebinduj si to na něco příčetného ve svém configu
 
 ## tipy & triky
 
@@ -257,6 +287,21 @@ pohoda - navíc je to poznávací znamení og vim chads
 vlastně poslední option by sis měl nastavit bez ohledu na to, jestli budeš ve vimu psát kód
 
 xp - prohodí dva znaky -> první smaže a pak ho pastne za ten druhý
+
+## customizace
+
+pokud ti ve vimu bude něco chybět, můžeš si to sám nakonfigurovat
+v závislosti na tom, jakou odrůdu vimu používáš (a na jaké platformě; já
+používám neovim na linuxu) se bude lišit umístění a jméno config souboru
+
+vlastní klavesové zkratky, příkazy, kosmetické úpravy - nic není problém :)
+
+krom toho existuje spousta optionů, které má vim zabudované a jdou aktivovat v configu
+doporučuju pročíst si dokumentaci (příkaz :help)
+
+existují také pluginy, ale do těch bych se být tebou alespoň ze začátku nepouštěl
+nejdřív se nauč používat vim v základu (a zjistíš, že je toho hodně, co se
+můžeš učit) a třeba časem shledáš, že většinu pluginů vůbec nepotřebuješ
 	</textarea>
 </body>
 </html>
