@@ -39,6 +39,7 @@ h1 {
 h2 {
 	color: #5B53B2;
 	font-variant: small-caps;
+	margin-bottom: 0.25em !important;
 }
 
 h3 {
@@ -48,8 +49,7 @@ h3 {
 }
 
 h2, h3 {
-	margin-bottom: 0.25em;
-	margin-top: 0.25em;
+	margin: 0em;
 }
 
 a {
@@ -63,6 +63,11 @@ a:hover {
 
 article > section {
 	padding-left: 1.5em;
+}
+
+article > header {
+	margin-bottom: 1em;
+	margin-top: 1em;
 }
 
 #menubar {
