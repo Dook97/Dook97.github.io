@@ -1,6 +1,7 @@
 @font-face {
 	font-family: "Cardo";
 	src: url("fonts/Cardo104s.ttf");
+	font-display: swap;
 }
 
 body {
@@ -9,23 +10,74 @@ body {
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
-	background-position: left center;
+	background-position: center center;
 
 	line-height: 1.1;
 	font-family: Cardo, P052, serif;
 	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 	color: #FFF;
 
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0;
+
+	max-width: 70vw;
+}
+
+#wrapper {
+	margin-top: 0;
+	margin-bottom: 8em;
+}
+
+#menubar {
+	display: flex;
+	justify-content: center;
 	margin: 0;
 	padding: 0;
 }
 
-#wrapper {
-	max-width: 90vw;
-	margin-left: 20%;
-	margin-right: 20%;
-	margin-top: 0;
-	margin-bottom: 8em;
+#menubar > div {
+	background-color: #000;
+	border-left: #FFF solid 2px;
+	margin-left:   0.25em;
+	margin-right:  0.25em;
+	margin-bottom: 0.3em;
+	font-variant: small-caps;
+}
+
+.nav-wrapper {
+	padding: 0.25em;
+	text-align: center;
+}
+
+#active, #menubar div:hover {
+	border-color: #BB8A4F !important;
+}
+
+main {
+	background-color: rgba(0, 0, 0, 0.60);
+	padding: 2em;
+}
+
+nav {
+	font-size: larger;
+	text-align: center;
+}
+
+nav a {
+	text-decoration: none !important;
+	color: inherit;
+}
+
+article > section {
+	padding-left: 1.5em;
+}
+
+article > header {
+	margin-bottom: 1em;
+	margin-top: 1em;
 }
 
 h1 {
@@ -61,50 +113,51 @@ a:hover {
 	text-decoration: underline;
 }
 
-article > section {
-	padding-left: 1.5em;
+i {
+	color: #68A6E5;
 }
 
-article > header {
-	margin-bottom: 1em;
-	margin-top: 1em;
+em {
+	color: #68A6E5;
+	font-style: normal;
 }
 
-#menubar {
-	display: flex;
-	justify-content: center;
-	margin: 0;
-	padding: 0;
+q {
+	color: #FCE945;
+	font-style: italic;
 }
 
-nav {
-	font-size: larger;
-	text-align: center;
+q:before {
+	content: "„";
 }
 
-nav a {
-	text-decoration: none !important;
-	color: inherit;
+q:after {
+	content: "”";
 }
 
-#menubar > div {
-	background: #000;
-	border-left: #FFF solid 2px;
-	margin-left:   0.25em;
-	margin-right:  0.25em;
-	margin-bottom: 0.3em;
-	font-variant: small-caps;
-}
+@media only screen and (max-width: 600px) {
+	body {
+		max-width: 100%;
+	}
 
-.nav-wrapper {
-	padding: 0.25em;
-}
+	#menubar > div {
+		background-color: rgba(0, 0, 0, 0.60) !important;
+		border-left: none;
+		border-bottom: 2px solid #FFF;
+	}
 
-main {
-	background-color: rgba(0, 0, 0, 0.70);
-	padding: 2%;
-}
+	h1 {
+		display: none;
+	}
 
-#active, #menubar div:hover {
-	border-color: #BB8A4F !important;
+	main {
+		padding-left: 0.75em;
+		padding-right: 0.75em;
+		padding-top: 1em;
+		padding-bottom: 2em;
+	}
+
+	article > section {
+		padding-left: 0.5em;
+	}
 }
