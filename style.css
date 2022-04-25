@@ -1,6 +1,8 @@
 @font-face {
 	font-family: "Cardo";
 	src: url("fonts/Cardo104s.ttf");
+
+	/* use default font while custom one is loading */
 	font-display: swap;
 }
 
@@ -12,7 +14,7 @@ body {
 	background-size: cover;
 	background-position: center center;
 
-	line-height: 1.1;
+	line-height: 1.12;
 	font-family: Cardo, P052, serif;
 	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 	color: #FFF;
