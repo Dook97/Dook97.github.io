@@ -1,6 +1,6 @@
 @font-face {
-	font-family: "Cardo";
-	src: url("fonts/Cardo104s.ttf");
+	font-family: "texgyrepagella";
+	src: url("fonts/texgyrepagella-regular.otf") format("opentype");
 
 	/* use default font while custom one is loading */
 	font-display: swap;
@@ -15,7 +15,8 @@ body {
 	background-position: center center;
 
 	line-height: 1.12;
-	font-family: Cardo, P052, serif;
+	font-family: texgyrepagella;
+	font-size: 0.95em;
 	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 	color: #FFF;
 
@@ -86,14 +87,14 @@ h1 {
 	color: #017A1D;
 	text-align: center;
 	font-variant: small-caps;
-	font-size: 2em;
-	margin: 0.5em;
+	font-size: 2em !important;
+	margin: 0.75em;
+	margin-bottom: 0.25em;
 }
 
 h2 {
 	color: #5B53B2;
 	font-variant: small-caps;
-	margin-bottom: 0.25em !important;
 }
 
 h3 {
