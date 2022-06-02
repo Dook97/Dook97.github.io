@@ -52,6 +52,7 @@ body {
 
 .nav-wrapper {
 	padding: 0.25em;
+	padding-bottom: 0 !important;
 	text-align: center;
 }
 
